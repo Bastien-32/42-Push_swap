@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 17:30:28 by badal-la          #+#    #+#             */
-/*   Updated: 2024/12/25 18:14:46 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/02 18:01:28 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,36 +17,19 @@
 #include <unistd.h>
 #include <stdlib.h> 
 #include <stdio.h>
+#include <limits.h>
 
-typedef struct s_list
+typedef struct s_node
 {
 	int				content;
-	struct s_list	*next;
-}					t_list;
+	struct s_node	*next;
+}					t_node;
 
-int	is_number(const char *str)
+t_node	*ft_lstnew(int content)
 {
-	int	i;
+	t_node	*node;
 
-	i = 0;
-	if (str[i] == '-')
-		i++;
-	while (str[i]) 
-	{
-		if (str[i]< '0' || str[i] > '9')
-			return (0);
-		i++;
-	}
-	if (str[i - 1] == '-')
-		return (0);
-	return (1);
-}
-
-t_list	*ft_lstnew(int content)
-{
-	t_list	*node;
-
-	node = (t_list *)malloc(sizeof(t_list));
+	node = (t_node *)malloc(sizeof(t_node));
 	if (!node)
 		return (NULL);
 	node->content = content;
@@ -54,7 +37,7 @@ t_list	*ft_lstnew(int content)
 	return (node);
 }
 
-void	ft_lstadd_front(t_list **lst, t_list *new)
+void	ft_lstadd_front(t_node **lst, t_node *new)
 {
 	if (!lst || !new)
 		return ;
@@ -62,9 +45,9 @@ void	ft_lstadd_front(t_list **lst, t_list *new)
 	*lst = new;
 }
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+void	ft_lstadd_back(t_node **lst, t_node *new)
 {
-	t_list	*last;
+	t_node	*last;
 
 	if (!*lst)
 	{
@@ -100,22 +83,41 @@ int	ft_atoi(const char *str)
 	return ((int)result);
 }
  
-t_list	*sa_ps(t_list *stack)
+void	swap(t_node **stack)
 {
-    t_list  *swap;
+    t_node  *swap;
 
-    if (!stack || !stack->next)
-        return (stack);
-    swap = stack->next;
-    stack->next = swap->next;
-    swap->next = stack;
-    return (swap);
+    if (!*stack || !(*stack)->next)
+        return;
+    swap = (*stack)->next;
+    (*stack)->next = swap->next;
+    swap->next = *stack;
+	*stack = swap;
+}
+void sa(t_node **a, int print)
+{
+	swap(a);
+	if (print)
+		write(1, "sa\n", 3);
+}
+void sb(t_node **b, int print)
+{
+	swap(b);
+	if (print)
+		write(1, "sb\n", 3);
+}
+void ss(t_node **a, t_node **b, int print)
+{
+	swap(a);
+	swap(b);
+	if (print)
+		write(1, "ss\n", 3);
 }
 
-t_list	*rra_ps(t_list **stack)
+void	*reverse_rotate(t_node **stack)
 {
-	t_list *previous;
-    t_list  *last;
+	t_node *previous;
+    t_node  *last;
 
 	previous = NULL;
 	last = *stack;
@@ -131,12 +133,30 @@ t_list	*rra_ps(t_list **stack)
 	*stack = last;
 	return (*stack);
 }
-
-void	ra_ps(t_list **stack)
+void rra(t_node **a, int print)
 {
-    t_list  *last;
-	t_list	*swap;
-	t_list	*first;
+	reverse_rotate(a);
+	if (print)
+		write(1, "rra\n", 4);
+}
+void rrb(t_node **b, int print)
+{
+	reverse_rotate(b);
+	if (print)
+		write(1, "rrb\n", 4);
+}
+void rrr(t_node **a, t_node **b, int print)
+{
+	reverse_rotate(a);
+	reverse_rotate(b);
+	if (print)
+		write(1, "rrr\n", 4);
+}
+void	rotate(t_node **stack)
+{
+    t_node  *last;
+	t_node	*swap;
+	t_node	*first;
 
 	last = *stack;
 	first = *stack;
@@ -149,21 +169,58 @@ void	ra_ps(t_list **stack)
 	first->next = NULL;
 	*stack = swap;
 }
-
-void	pb_ps(t_list **stack_a, t_list **stack_b)
-
+void ra(t_node **a, int print)
 {
-	t_list	*temp;
+	rotate(a);
+	if (print)
+		write(1, "ra\n", 3);
+}
+void rb(t_node **b, int print)
+{
+	rotate(b);
+	if (print)
+		write(1, "rb\n", 3);
+}
+void rr(t_node **a, t_node **b, int print)
+{
+	rotate(a);
+	rotate(b);
+	if (print)
+		write(1, "rr\n", 3);
+}
+void	push(t_node **src, t_node **dest)
+{
+	t_node	*temp;
 
-	if (!stack_a || !*stack_a)
+	if (!*src)
 		return ;
-	temp = *stack_a;
-	*stack_a = (*stack_a)->next;
-	temp->next = NULL;
-	ft_lstadd_front(stack_b, temp);
+	temp = *src;
+	*src = (*src)->next;
+	if (!dest)
+	{
+		*dest = temp;
+		temp->next = NULL;
+	}
+	else
+	{
+		temp->next = *dest;
+		*dest = temp;
+	}
+}
+void	pa(t_node **a, t_node **b, int print)
+{
+	push(b, a);
+	if (print)
+		write(1, "pa\n", 3);
+}
+void	pb(t_node **a, t_node **b, int print)
+{
+	push(a, b);
+	if (print)
+		write(1, "pb\n", 3);
 }
 
-void	printlist(t_list *temp_a, t_list *temp_b)
+void	printlist(t_node *temp_a, t_node *temp_b)
 {
 	while (temp_a || temp_b)
 	{
@@ -188,13 +245,295 @@ void	printlist(t_list *temp_a, t_list *temp_b)
 	printf("a   b\n");
 }
 
+int	nwords(char *str, char separator)
+{
+	int	i;
+	int count;
+
+	i = 0;
+	count = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+	{
+		if (str[i] != separator && (i == 0 || str[i - 1] == separator))
+			count++;
+		i++;
+	}
+	return (count);
+}
+
+int	lenword(char *str, int i, char separator)
+{
+	int count;
+
+	count = 0;
+	while (str[i + count] && str[i + count] != separator)
+		count++;
+	return (count);
+}
+static char	**free_split(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
+		free(tab[i++]);
+	free(tab);
+	return (NULL);
+}
+char	*ft_substr(char *str, int start, int len)
+{
+	int		i;
+	char	*dup;
+
+	i = 0;
+	dup = (char *)malloc(sizeof(char) * (len + 1));
+	if (!dup)
+		return (NULL);
+	while (i < len)
+	{
+		dup[i] = str[start + i];
+		i++;
+	}
+	dup[i] = '\0';
+	return (dup);
+}
+char	**ft_split(char *str, char separator)
+{
+	int		i;
+	int		j;
+	char	**tab;
+
+	i = 0;
+	j = 0;
+	tab = (char **)malloc(sizeof(char *) * (nwords(str, separator) + 1));
+	if (!tab)
+		return (NULL);
+	while (str[i])
+	{
+		if (str[i] != separator)
+		{
+			tab[j] = ft_substr(str, i, lenword(str, i, separator));
+			if (!tab[j])
+				return (free_split(tab));
+			j++;
+			i += lenword(str, i, separator);
+		}
+		else
+			i++;
+	}
+	tab[j] = NULL;
+	return (tab);
+}
+
+void	ft_putstr(char *str)
+{
+	while (*str)
+		write(1, str++, 1);
+}
+int	is_number(const char *str)
+{
+	int	i;
+	
+	i = 0;
+	while(str[i])
+	{
+		while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
+			i++;
+		if (str[i] == '+' || str[i] == '-')
+			i++;
+		while (str[i] >= '0' && str[i] <= '9')
+			i++;
+		if (str[i] && !((str[i] >= 9 && str[i] <= 13) || str[i] == ' '))
+			return (0);
+	}
+	return (1);
+}
+char	**parse_args(int argc, char **argv)
+{
+	char		**split_argv;
+	if (argc == 2)
+	{
+		split_argv = ft_split(argv[1], ' ');
+		if (!split_argv)
+			return (NULL);
+		return (split_argv);
+	}
+		return (argv + 1);
+}
+int check_args(int argc, char **argv)
+{
+	int	i;
+
+	i = 1;
+	if(argc == 1)
+		return (1);
+	while (argv[i])
+	{	
+		if (!is_number(argv[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+void	init_stack(int argc, char **argv, t_node **a)
+{
+	int		i;
+	char	**split_argv;
+	
+	if (argc == 2)
+		split_argv = parse_args(argc, argv);
+	else
+		split_argv = argv + 1;
+	*a = ft_lstnew(ft_atoi(split_argv[0]));
+	i = 1;
+	while (split_argv[i])
+		ft_lstadd_back(a, ft_lstnew(ft_atoi(split_argv[i++])));
+}
+int a_is_sorted(t_node **a)
+{
+	t_node	*temp;
+	
+	temp = *a;
+	while (temp->next)
+	{
+		if (temp->content > temp->next->content)
+			return (0);
+		temp = temp->next;
+	}
+	return (1);
+}
+int	a_contain_doubles(t_node **a)
+{
+	t_node	*temp;
+	t_node	*temp2;
+	
+	temp = *a;
+	while (temp)
+	{
+		temp2 = temp->next;
+		while (temp2)
+		{
+			if (temp->content == temp2->content)
+				return (1);
+			temp2 = temp2->next;
+		}
+		temp = temp->next;
+	}
+	return (0);
+}
+
+int	check_stack(t_node **a)
+{
+	if (a_is_sorted(a))
+		exit (-1);
+	if (a_contain_doubles(a))
+	{
+		write(1, "Error\n", 6);
+		return (1);
+	}
+	return (0);
+}
+
+int	lstsize(t_node *lst)
+{
+	int		i;
+	
+	i = 0;
+	while (lst)
+	{
+		lst = lst->next;
+		i++;
+	}
+	return (i);
+}
+
+/* void	sort10(t_node **a, int size)
+{
+	if (size < 10)
+	{
+		
+	}
+} */
+
+void	sort3(t_node **a, int size)
+{
+	if (size == 3)
+	{
+		if ((*a)->content > (*a)->next->content)
+			sa(a, 1);
+		if ((*a)->content > (*a)->next->next->content)
+			rra(a, 1);
+		if ((*a)->next->content > (*a)->next->next->content)
+		{
+			sa(a, 1);
+			ra(a, 1);
+		}
+	}
+}
+/* void	sort5(t_node **a, t_node **b, int size)
+{
+	t_node	*temp_a;
+	
+	temp_a = *a;
+	if (size == 5)
+	{
+		while (temp_a && temp_a->content > (*a)->content)
+		{
+		
+		}
+	}
+} */
+void	sort(t_node **a, t_node **b, int size)
+{
+	if (size == 2)
+	{
+		if ((*a)->content > (*a)->next->content)
+			sa(a, 1);
+	}
+	sort3(a, size);
+	//sort10(&a, size);
+}
+
+int	main(int argc, char *argv[])
+{
+	t_node 	*a;
+	t_node 	*b;
+	int 	size;
+	
+	a = NULL;
+	b = NULL;
+	if (!check_args(argc, argv))
+	{
+		init_stack(argc, argv, &a);
+		check_stack(&a);
+		size = lstsize(a);
+		sort(&a, &b, size);
+		
+		t_node	*temp_a;
+		t_node	*temp_b;
+		printf("Listes après tri : \n");
+		temp_a = a;
+		temp_b = b;
+		printlist(temp_a, temp_b);
+		
+		/* free_split(split_argv); 
+		gros doute sur le fait que ce soit free avant...*/
+	}
+	else
+		write(1, "Error\n", 6);
+}
+
+/* 
+//test commandes
 int	main(int argc, char *argv[])
 {
 	int		i = 1;
-	t_list	*stack_a;
-	t_list	*stack_b;
-	t_list	*temp_a;
-	t_list	*temp_b;
+	t_node	*stack_a;
+	t_node	*stack_b;
+	t_node	*temp_a;
+	t_node	*temp_b;
 	
 	if (argc <= 1)
 	{
@@ -225,28 +564,33 @@ int	main(int argc, char *argv[])
 	temp_b = stack_b;
 	printlist(temp_a, temp_b);
 
-	stack_a = sa_ps(stack_a);
+	sa(&stack_a, 1);
 	temp_a = stack_a;
 	printf("Listes après tri : \n");
 	printlist(temp_a, temp_b);
 
-	ra_ps(&stack_a);
+	ra(&stack_a, 1);
 	temp_a = stack_a;
 	printf("Listes après tri : \n");
 	printlist(temp_a, temp_b);
 
-	pb_ps(&stack_a, &stack_b);
+	pb(&stack_a, &stack_b, 1);
 	temp_a = stack_a;
 	temp_b = stack_b;
 	printf("Listes après tri : \n");
 	printlist(temp_a, temp_b);
 
-	pb_ps(&stack_a, &stack_b);
-	pb_ps(&stack_a, &stack_b);
-	pb_ps(&stack_a, &stack_b);
+	pb(&stack_a, &stack_b, 1);
+	pb(&stack_a, &stack_b, 1);
+	pb(&stack_a, &stack_b, 1);
 	temp_a = stack_a;
+	temp_b = stack_b;
+	printf("Listes après tri : \n");
+	printlist(temp_a, temp_b);
+
+	rb(&stack_b, 1);
 	temp_b = stack_b;
 	printf("Listes après tri : \n");
 	printlist(temp_a, temp_b);
 	return (0);
-}
+} */
