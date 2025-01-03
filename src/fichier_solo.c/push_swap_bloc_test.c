@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap_bloc.c                                   :+:      :+:    :+:   */
+/*   push_swap_bloc_test.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 17:30:28 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/03 15:55:52 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/03 17:55:57 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@
 typedef struct s_node
 {
 	int				content;
+	int 			lenght;
+	int				pos_number;
+	int 			sub_sequence;
+	int				index;
+	int 			in_lic;
+	struct s_node	*prev;
 	struct s_node	*next;
 }					t_node;
 
@@ -33,6 +39,10 @@ t_node	*ft_lstnew(int content)
 	if (!node)
 		return (NULL);
 	node->content = content;
+	node->lenght = 1;
+	node->sub_sequence = 0;
+	node->in_lic = 0;
+	node->prev = NULL;	
 	node->next = NULL;
 	return (node);
 }
@@ -58,6 +68,8 @@ void	ft_lstadd_back(t_node **lst, t_node *new)
 	while (last->next)
 		last = last->next;
 	last->next = new;
+	new->index = last->index + 1;
+	new->prev = last;
 }
 
 int	ft_atoi(const char *str)
@@ -274,6 +286,7 @@ int	lenword(char *str, int i, char separator)
 		count++;
 	return (count);
 }
+
 static char	**free_split(char **tab)
 {
 	int	i;
@@ -284,6 +297,7 @@ static char	**free_split(char **tab)
 	free(tab);
 	return (NULL);
 }
+
 char	*ft_substr(char *str, int start, int len)
 {
 	int		i;
@@ -301,6 +315,7 @@ char	*ft_substr(char *str, int start, int len)
 	dup[i] = '\0';
 	return (dup);
 }
+
 char	**ft_split(char *str, char separator)
 {
 	int		i;
@@ -334,6 +349,7 @@ void	ft_putstr(char *str)
 	while (*str)
 		write(1, str++, 1);
 }
+
 int	is_number(const char *str)
 {
 	int	i;
@@ -352,6 +368,7 @@ int	is_number(const char *str)
 	}
 	return (1);
 }
+
 char	**parse_args(int argc, char **argv)
 {
 	char		**split_argv;
@@ -364,6 +381,7 @@ char	**parse_args(int argc, char **argv)
 	}
 		return (argv + 1);
 }
+
 int check_args(int argc, char **argv)
 {
 	int	i;
@@ -379,6 +397,7 @@ int check_args(int argc, char **argv)
 	}
 	return (0);
 }
+
 void	init_stack(int argc, char **argv, t_node **a)
 {
 	int		i;
@@ -389,10 +408,12 @@ void	init_stack(int argc, char **argv, t_node **a)
 	else
 		split_argv = argv + 1;
 	*a = ft_lstnew(ft_atoi(split_argv[0]));
+	(*a)->index = 0;
 	i = 1;
 	while (split_argv[i])
 		ft_lstadd_back(a, ft_lstnew(ft_atoi(split_argv[i++])));
 }
+
 int a_is_sorted(t_node **a)
 {
 	t_node	*temp;
@@ -406,6 +427,7 @@ int a_is_sorted(t_node **a)
 	}
 	return (1);
 }
+
 int	a_contain_doubles(t_node **a)
 {
 	t_node	*temp;
@@ -451,8 +473,6 @@ int	lstsize(t_node *lst)
 	return (i);
 }
 
-
-
 void	sort3(t_node **a, int size)
 {
 	if (size == 3)
@@ -488,14 +508,155 @@ void	sort3(t_node **a, int size)
 		
 	}
 } */
-void	big_sorts(a, size)
+
+void update_lenghts(t_node *temp_i,t_node *temp_j,int i)
+{
+	int 	temp_lenght;
+	temp_lenght = temp_j->lenght + 1;
+	if(temp_lenght >= temp_i->lenght)
+	{
+		temp_i->lenght = temp_lenght;
+		if(i >= temp_i->sub_sequence)
+			temp_i->sub_sequence = i;
+	}
+}
+
+void lic(t_node **a)
+{
+	t_node	*temp_i;
+	t_node	*temp_j;
+	int 	temp_lenght;
+	int		i;
+
+	temp_i = (*a)->next;
+	while (temp_i)
+	{
+		temp_j = *a;
+		i = 0;
+		while (temp_j != temp_i)
+		{
+			if (temp_j->content < temp_i->content)
+				update_lenghts(temp_i, temp_j, i);
+			temp_j = temp_j->next;
+			i++;
+		}
+		temp_i = temp_i->next;
+	}
+}
+
+int	find_max_sub_sequence(t_node **a)
+{
+	t_node 	*temp_a;
+	int		max_sub_sequence;
+
+	max_sub_sequence = temp_a->sub_sequence;
+	while (temp_a)
+	{
+		if (temp_a->sub_sequence > max_sub_sequence)
+			max_sub_sequence = temp_a->sub_sequence;
+		temp_a = temp_a->next;
+	}
+	return(max_sub_sequence);
+}
+
+void	increase_lic(int index, int next_subsequence, t_node *temp_a, int temp)
+{
+	while (1)
+	{
+		if (temp_a->index == next_subsequence)
+		{
+			temp_a->in_lic = 1;
+			next_subsequence = temp_a->sub_sequence;
+		}
+		if (temp_a->sub_sequence == 0)
+		{
+			if (temp_a->index != 0)
+			{
+				temp = temp_a->content;
+				while (temp_a)
+				{
+					if (temp_a->prev == NULL)
+						break;
+					temp_a = temp_a->prev;
+				}
+				if (temp_a->content < temp)
+					temp_a->in_lic = 1;
+			}
+			break;
+		}
+		temp_a = temp_a->prev;
+	}
+}
+
+void	is_in_lic(t_node **a)
+{
+	t_node	*temp_a;
+	int		max_sub_sequence;
+	int		next_subsequence;
+	int		temp;
+
+	temp = 0;
+	max_sub_sequence = find_max_sub_sequence(a);
+	temp_a = *a;
+	while (temp_a->sub_sequence != max_sub_sequence)
+		temp_a = temp_a->next;
+	temp_a->in_lic = 1;
+	next_subsequence = temp_a->sub_sequence;
+	temp_a = temp_a->prev;
+	increase_lic(temp_a->index, next_subsequence, temp_a, temp);
+}
+
+void pos_number(t_node **a)
+{
+    t_node *current;
+    t_node *compare;
+    int position;
+
+    current = *a;
+    while (current)
+    {
+        position = 1;
+        compare = *a;
+        while (compare)
+        {
+            if (compare->content < current->content)
+                position++;
+            compare = compare->next;
+        }
+        current->pos_number = position;
+        current = current->next;
+    }
+}
+
+void	first_sort(t_node **a, t_node **b, int size)
+{
+	int	i;
+	
+	i = size;
+	while (i--)
+	{
+		if ((*a)->in_lic == 0)
+		{
+			pb(a, b, 1);
+			printf("content_b = %d | b_pos=%d | size = %d\n",(*b)->content, (*b)->pos_number, size / 2);
+			if ((*b)->pos_number < size / 2)
+				rb(b, 1); 
+		}
+		else if ((*a)->in_lic == 1)
+			ra(a, 1);
+	}
+}
+void	big_sorts(t_node **a, t_node **b, int size)
 {
 	if (size > 3)
 	{
-		lic(&a);
-		is_in_lic(&a);
+		lic(a);
+		is_in_lic(a);
+		pos_number(a);
+		//first_sort(a, b, size);
 	}
 }
+
 void	sort(t_node **a, t_node **b, int size)
 {
 	if (size == 2)
@@ -504,7 +665,7 @@ void	sort(t_node **a, t_node **b, int size)
 			sa(a, 1);
 	}
 	sort3(a, size);
-	big_sorts(a, size);
+	big_sorts(a, b, size);
 	//sort10(&a, size);
 }
 

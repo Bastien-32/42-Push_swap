@@ -7,7 +7,11 @@ typedef struct s_node
 {
 	int				content;
 	int 			lenght;
+	int				pos_number;
 	int 			sub_sequence;
+	int				index;
+	int 			in_lic;
+	struct s_node	*prev;
 	struct s_node	*next;
 }					t_node;
 
@@ -22,6 +26,8 @@ t_node	*ft_lstnew(int content)
 	node->content = content;
 	node->lenght = 1;
 	node->sub_sequence = 0;
+	node->in_lic = 0;
+	node->prev = NULL;	
 	node->next = NULL;
 	return (node);
 }
@@ -39,6 +45,8 @@ void	ft_lstadd_back(t_node **lst, t_node *new)
 	while (last->next)
 		last = last->next;
 	last->next = new;
+	new->index = last->index + 1;
+	new->prev = last;
 }
 
 int	ft_atoi(const char *str)
@@ -169,6 +177,7 @@ void	init_stack(int argc, char **argv, t_node **a)
 	else
 		split_argv = argv + 1;
 	*a = ft_lstnew(ft_atoi(split_argv[0]));
+	(*a)->index = 0;
 	i = 1;
 	while (split_argv[i])
 		ft_lstadd_back(a, ft_lstnew(ft_atoi(split_argv[i++])));
@@ -189,68 +198,157 @@ int	lstsize(t_node *lst)
 
 void	printlist(t_node *temp_a)
 {
-	printf("a  l  s\n");
-	printf("-  -  -\n");
+	printf(" a  i  l  s  p  n\n");
+	printf(" -  -  -  -  -  -\n");
 	while (temp_a)
 	{
 		if (temp_a->content < 10)
-			printf(" %d  %d  %d\n", temp_a->content, temp_a->lenght, temp_a->sub_sequence);
+			printf(" %d  %d  %d  %d  %d  %d\n", temp_a->content, temp_a->index, temp_a->lenght, temp_a->sub_sequence, temp_a->in_lic, temp_a->pos_number);
 		else
-			printf("%d  %d  %d\n", temp_a->content, temp_a->lenght, temp_a->sub_sequence);
+			printf("%d  %d  %d  %d  %d  %d\n", temp_a->content, temp_a->index, temp_a->lenght, temp_a->sub_sequence, temp_a->in_lic, temp_a->pos_number);
 		temp_a = temp_a->next;
 	}
 }
-t_node *lic(t_node **a)
+
+void update_lenghts(t_node *temp_i,t_node *temp_j,int i)
+{
+	int 	temp_lenght;
+	temp_lenght = temp_j->lenght + 1;
+	if(temp_lenght >= temp_i->lenght)
+	{
+		temp_i->lenght = temp_lenght;
+		if(i >= temp_i->sub_sequence)
+			temp_i->sub_sequence = i;
+	}
+}
+void lic(t_node **a)
 {
 	t_node	*temp_i;
 	t_node	*temp_j;
-	int temp_lenght;
-	int temp_sub_sequence;
-	int i;
+	int 	temp_lenght;
+	int		i;
 
 	temp_i = (*a)->next;
 	while (temp_i)
 	{
 		temp_j = *a;
 		i = 0;
-		while (temp_j < temp_i)
+		while (temp_j != temp_i)
 		{
 			if (temp_j->content < temp_i->content)
-			{
-				temp_lenght = temp_j->lenght + 1;
-				if(temp_lenght > temp_i->lenght)
-				{
-					temp_i->lenght = temp_lenght;
-					temp_sub_sequence = i;
-					if(temp_sub_sequence > temp_i->sub_sequence)
-						temp_i->sub_sequence = temp_sub_sequence;
-				}
-			}
+				update_lenghts(temp_i, temp_j, i);
 			temp_j = temp_j->next;
 			i++;
 		}
-		printf("cont temp_i =%d | cont temp_j =%d | temp_i->lenght =%d | temp_i->sub_sequence=%d\n", temp_i->content, temp_j->content, temp_i->lenght, temp_i->sub_sequence);
 		temp_i = temp_i->next;
 	}
-	return(temp_i);
 }
+int	find_max_sub_sequence(t_node **a)
+{
+	t_node 	*temp_a;
+	int		max_sub_sequence;
+
+	max_sub_sequence = temp_a->sub_sequence;
+	while (temp_a)
+	{
+		if (temp_a->sub_sequence > max_sub_sequence)
+			max_sub_sequence = temp_a->sub_sequence;
+		temp_a = temp_a->next;
+	}
+	return(max_sub_sequence);
+}
+
+void	increase_lic(int index, int next_subsequence, t_node *temp_a, int temp)
+{
+	while (1)
+	{
+		if (temp_a->index == next_subsequence)
+		{
+			temp_a->in_lic = 1;
+			next_subsequence = temp_a->sub_sequence;
+		}
+		if (temp_a->sub_sequence == 0)
+		{
+			if (temp_a->index != 0)
+			{
+				temp = temp_a->content;
+				while (temp_a)
+				{
+					if (temp_a->prev == NULL)
+						break;
+					temp_a = temp_a->prev;
+				}
+				if (temp_a->content < temp)
+					temp_a->in_lic = 1;
+			}
+			break;
+		}
+		temp_a = temp_a->prev;
+	}
+}
+
+void	is_in_lic(t_node **a)
+{
+	t_node	*temp_a;
+	int		max_sub_sequence;
+	int		next_subsequence;
+	int		temp;
+
+	temp = 0;
+	max_sub_sequence = find_max_sub_sequence(a);
+	temp_a = *a;
+	while (temp_a->sub_sequence != max_sub_sequence)
+		temp_a = temp_a->next;
+	printf("max_sub_sequence = %d\n", temp_a->index);
+	temp_a->in_lic = 1;
+	next_subsequence = temp_a->sub_sequence;
+	temp_a = temp_a->prev;
+	increase_lic(temp_a->index, next_subsequence, temp_a, temp);
+}
+
+void pos_number(t_node **list)
+{
+    t_node *current;
+    t_node *compare;
+    int position;
+
+    current = *list;
+    while (current)
+    {
+        position = 1;
+        compare = *list;
+        while (compare)
+        {
+            if (compare->content < current->content)
+                position++;
+            compare = compare->next;
+        }
+        current->pos_number = position;
+        current = current->next;
+    }
+}
+
 int main(int argc, char *argv[])
 {
 	//char *a ="00 04 12 02 10 06 09 13 03 11 07 15";
 	t_node 	*a;
 	t_node 	*b;
 	int 	size;
+	t_node	*temp_a;
+	t_node	*temp_b;
 	
 	a = NULL;
 	b = NULL;
 	init_stack(argc, argv, &a);
 	size = lstsize(a);
+	lic(&a);
+	is_in_lic(&a);
+	pos_number(&a);
 
-	a = lic(&a);
-	t_node	*temp_a;
-	t_node	*temp_b;
+
 	printf("Listes après tri : \n");
 	temp_a = a;
 	temp_b = b;
 	printlist(temp_a);
+	return (0);
 }
