@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap_bloc_test.c                              :+:      :+:    :+:   */
+/*   push_swap_bloc_test_sort_b_to_a.c                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 17:30:28 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/03 17:55:57 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/04 16:35:02 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ typedef struct s_node
 	int 			sub_sequence;
 	int				index;
 	int 			in_lic;
+	int				compt_a;
+	int				compt_b;
+	int				cheapest;
 	struct s_node	*prev;
 	struct s_node	*next;
 }					t_node;
@@ -42,6 +45,7 @@ t_node	*ft_lstnew(int content)
 	node->lenght = 1;
 	node->sub_sequence = 0;
 	node->in_lic = 0;
+	node->compt_b = 0;
 	node->prev = NULL;	
 	node->next = NULL;
 	return (node);
@@ -276,7 +280,6 @@ int	nwords(char *str, char separator)
 	}
 	return (count);
 }
-
 int	lenword(char *str, int i, char separator)
 {
 	int count;
@@ -286,7 +289,6 @@ int	lenword(char *str, int i, char separator)
 		count++;
 	return (count);
 }
-
 static char	**free_split(char **tab)
 {
 	int	i;
@@ -297,7 +299,6 @@ static char	**free_split(char **tab)
 	free(tab);
 	return (NULL);
 }
-
 char	*ft_substr(char *str, int start, int len)
 {
 	int		i;
@@ -315,7 +316,6 @@ char	*ft_substr(char *str, int start, int len)
 	dup[i] = '\0';
 	return (dup);
 }
-
 char	**ft_split(char *str, char separator)
 {
 	int		i;
@@ -509,7 +509,7 @@ void	sort3(t_node **a, int size)
 	}
 } */
 
-void update_lenghts(t_node *temp_i,t_node *temp_j,int i)
+void update_lenghts(t_node *temp_i, t_node *temp_j, int i)
 {
 	int 	temp_lenght;
 	temp_lenght = temp_j->lenght + 1;
@@ -549,17 +549,17 @@ int	find_max_sub_sequence(t_node **a)
 	t_node 	*temp_a;
 	int		max_sub_sequence;
 
-	max_sub_sequence = temp_a->sub_sequence;
+	max_sub_sequence = temp_a->lenght;	
 	while (temp_a)
 	{
-		if (temp_a->sub_sequence > max_sub_sequence)
-			max_sub_sequence = temp_a->sub_sequence;
+		if (temp_a->lenght > max_sub_sequence)
+			max_sub_sequence = temp_a->lenght;
 		temp_a = temp_a->next;
 	}
 	return(max_sub_sequence);
 }
 
-void	increase_lic(int index, int next_subsequence, t_node *temp_a, int temp)
+void	fill_lic(int index, int next_subsequence, t_node *temp_a, int temp)
 {
 	while (1)
 	{
@@ -568,7 +568,7 @@ void	increase_lic(int index, int next_subsequence, t_node *temp_a, int temp)
 			temp_a->in_lic = 1;
 			next_subsequence = temp_a->sub_sequence;
 		}
-		if (temp_a->sub_sequence == 0)
+		if (temp_a->index == next_subsequence && temp_a->sub_sequence == 0)
 		{
 			if (temp_a->index != 0)
 			{
@@ -598,12 +598,12 @@ void	is_in_lic(t_node **a)
 	temp = 0;
 	max_sub_sequence = find_max_sub_sequence(a);
 	temp_a = *a;
-	while (temp_a->sub_sequence != max_sub_sequence)
+	while (temp_a->lenght != max_sub_sequence)
 		temp_a = temp_a->next;
 	temp_a->in_lic = 1;
 	next_subsequence = temp_a->sub_sequence;
 	temp_a = temp_a->prev;
-	increase_lic(temp_a->index, next_subsequence, temp_a, temp);
+	fill_lic(temp_a->index, next_subsequence, temp_a, temp);
 }
 
 void pos_number(t_node **a)
@@ -638,7 +638,6 @@ void	first_sort(t_node **a, t_node **b, int size)
 		if ((*a)->in_lic == 0)
 		{
 			pb(a, b, 1);
-			printf("content_b = %d | b_pos=%d | size = %d\n",(*b)->content, (*b)->pos_number, size / 2);
 			if ((*b)->pos_number < size / 2)
 				rb(b, 1); 
 		}
@@ -646,6 +645,123 @@ void	first_sort(t_node **a, t_node **b, int size)
 			ra(a, 1);
 	}
 }
+
+void	actualize_index(t_node *b)
+{
+	t_node	*temp_b;
+	int		i;
+
+	i = 0;
+	temp_b = b;
+	while (temp_b)
+	{
+		temp_b->index = i;
+		temp_b = temp_b->next;
+		i++;
+	}
+}
+void	fill_num_rot_b(t_node *b, int size_b)
+{
+	t_node	*temp_b;
+
+	temp_b = b;
+	while (temp_b)
+	{
+		if (temp_b->index < size_b / 2)
+			temp_b->compt_b = temp_b->index;
+		else
+			temp_b->compt_b = temp_b->index - size_b;
+		temp_b = temp_b->next;
+	}
+}
+
+void fill_num_rot_a(t_node **a, int size_a, int pos_number_b, int *compt_a_in_b)
+{
+	t_node	*temp_a;
+	
+	temp_a = *a;
+	if (temp_a->pos_number > pos_number_b)
+		*compt_a_in_b = 0;
+	else
+	{
+		while (temp_a)
+		{
+			if (pos_number_b == temp_a->pos_number + 1)
+				break;
+			if (temp_a->next == NULL)
+				break;
+			temp_a = temp_a->next;
+		}
+		if (temp_a->index < size_a / 2)
+			*compt_a_in_b = temp_a->index;
+		else
+			*compt_a_in_b = temp_a->index - size_a;
+	}
+}
+
+void	cheapest(t_node *b)
+{
+	if(b->compt_a <= 0 && b->compt_b <= 0)
+	{
+		if (b->compt_a < b->compt_b)
+			b->cheapest = b->compt_a;
+		else
+			b->cheapest = b->compt_b;
+	}
+	else if (b->compt_a >= 0 && b->compt_b >= 0)
+	{
+		if (b->compt_a < b->compt_b)
+			b->cheapest = b->compt_b;
+		else
+			b->cheapest = b->compt_a;
+	}
+	else if (b->compt_a <= 0 && b->compt_b >= 0)
+		b->cheapest = b->compt_b - b->compt_a;
+	else if (b->compt_a >= 0 && b->compt_b <= 0)
+		b->cheapest = b->compt_a - b->compt_b;
+}
+
+void	sort_b_to_a(t_node **a, t_node **b)
+{
+	t_node	*temp_b;
+	
+	temp_b = *b;
+	while (temp_b)
+	{
+		if (temp_b->compt_a < 0 && temp_b->compt_b < 0)
+		{
+			
+		}
+	}
+}
+
+void	second_sort(t_node **a, t_node **b, int size)
+{
+	int		size_a;
+	int		size_b;
+	t_node	*temp_b;
+	
+	temp_b = *b;
+	while(1)
+	{
+		size_a = lstsize(*a);
+		size_b = lstsize(*b);
+		actualize_index(*a);
+		actualize_index(*b);
+		fill_num_rot_b(*b, size_b);
+		while(temp_b)
+		{
+			fill_num_rot_a(a, size_a, temp_b->pos_number, &temp_b->compt_a);
+			cheapest(temp_b);
+			printf("compt_a = %d | compt_b = %d | compt_cheapest = %d\n", temp_b->compt_a, temp_b->compt_b, temp_b->cheapest);
+			temp_b = temp_b->next;
+		}
+		temp_b = *b;
+		//sort_b_to_a(a, b);
+		break;
+	}
+}
+
 void	big_sorts(t_node **a, t_node **b, int size)
 {
 	if (size > 3)
@@ -653,7 +769,8 @@ void	big_sorts(t_node **a, t_node **b, int size)
 		lic(a);
 		is_in_lic(a);
 		pos_number(a);
-		//first_sort(a, b, size);
+		first_sort(a, b, size);
+		second_sort(a, b, size);
 	}
 }
 
@@ -664,7 +781,7 @@ void	sort(t_node **a, t_node **b, int size)
 		if ((*a)->content > (*a)->next->content)
 			sa(a, 1);
 	}
-	sort3(a, size);
+	sort3(a, size);	
 	big_sorts(a, b, size);
 	//sort10(&a, size);
 }

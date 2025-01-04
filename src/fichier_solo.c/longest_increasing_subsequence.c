@@ -210,7 +210,7 @@ void	printlist(t_node *temp_a)
 	}
 }
 
-void update_lenghts(t_node *temp_i,t_node *temp_j,int i)
+void update_lenghts(t_node *temp_i, t_node *temp_j, int i)
 {
 	int 	temp_lenght;
 	temp_lenght = temp_j->lenght + 1;
@@ -248,17 +248,19 @@ int	find_max_sub_sequence(t_node **a)
 	t_node 	*temp_a;
 	int		max_sub_sequence;
 
-	max_sub_sequence = temp_a->sub_sequence;
+	max_sub_sequence = temp_a->lenght;
+	printf("%d\n", max_sub_sequence);	
+
 	while (temp_a)
 	{
-		if (temp_a->sub_sequence > max_sub_sequence)
-			max_sub_sequence = temp_a->sub_sequence;
+		if (temp_a->lenght > max_sub_sequence)
+			max_sub_sequence = temp_a->lenght;
 		temp_a = temp_a->next;
 	}
 	return(max_sub_sequence);
 }
 
-void	increase_lic(int index, int next_subsequence, t_node *temp_a, int temp)
+void	fill_lic(int index, int next_subsequence, t_node *temp_a, int temp)
 {
 	while (1)
 	{
@@ -267,7 +269,7 @@ void	increase_lic(int index, int next_subsequence, t_node *temp_a, int temp)
 			temp_a->in_lic = 1;
 			next_subsequence = temp_a->sub_sequence;
 		}
-		if (temp_a->sub_sequence == 0)
+		if (temp_a->index == next_subsequence && temp_a->sub_sequence == 0)
 		{
 			if (temp_a->index != 0)
 			{
@@ -297,13 +299,12 @@ void	is_in_lic(t_node **a)
 	temp = 0;
 	max_sub_sequence = find_max_sub_sequence(a);
 	temp_a = *a;
-	while (temp_a->sub_sequence != max_sub_sequence)
+	while (temp_a->lenght != max_sub_sequence)
 		temp_a = temp_a->next;
-	printf("max_sub_sequence = %d\n", temp_a->index);
 	temp_a->in_lic = 1;
 	next_subsequence = temp_a->sub_sequence;
 	temp_a = temp_a->prev;
-	increase_lic(temp_a->index, next_subsequence, temp_a, temp);
+	fill_lic(temp_a->index, next_subsequence, temp_a, temp);
 }
 
 void pos_number(t_node **list)
