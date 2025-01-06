@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap_bloc_test_sort_b_to_a.c                  :+:      :+:    :+:   */
+/*   push_swap_bloc_test_sort_b_to_a_2.c                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 17:30:28 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/05 17:37:23 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/05 17:54:05 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -605,7 +605,6 @@ void	is_in_lic(t_node **a)
 	temp_a = temp_a->prev;
 	fill_lic(temp_a->index, next_subsequence, temp_a, temp);
 }
-
 void pos_number(t_node **a)
 {
     t_node *current;
@@ -676,27 +675,34 @@ void	fill_num_rot_b(t_node *b, int size_b)
 	}
 }
 
-void fill_num_rot_a(t_node **a, int size_a, int pos_number_b, int *compt_a_in_b)
+void	fill_num_rot_a(t_node **a, t_node **b, int size_a, int pos_number_b, int *compt_a_in_b)
 {
 	t_node	*temp_a;
+	t_node	*temp_b;
 	
 	temp_a = *a;
-	if (temp_a->pos_number > pos_number_b)
-		*compt_a_in_b = 0;
-	else
+	temp_b = *b;
+	while(temp_b)
 	{
-		while (temp_a)
-		{
-			if (pos_number_b == temp_a->pos_number + 1)
-				break;
-			if (temp_a->next == NULL)
-				break;
-			temp_a = temp_a->next;
-		}
-		if (temp_a->index < size_a / 2)
-			*compt_a_in_b = temp_a->index;
+		if (temp_a->pos_number > pos_number_b)
+			*compt_a_in_b = 0;
 		else
-			*compt_a_in_b = temp_a->index - size_a;
+		{
+			while (temp_a)
+			{
+				if (pos_number_b == temp_a->pos_number + 1)
+					break;
+				if (temp_a->next == NULL)
+					break;
+				temp_a = temp_a->next;
+			}
+			if (temp_a->index < size_a / 2)
+				*compt_a_in_b = temp_a->index;
+			else
+				*compt_a_in_b = temp_a->index - size_a;
+		}
+		cheapest(temp_b);
+		temp_b = temp_b->next;
 	}
 }
 
@@ -875,13 +881,9 @@ void	second_sort(t_node **a, t_node **b, int size)
 		actualize_index(*a);
 		actualize_index(*b);
 		fill_num_rot_b(*b, size_b);
-		while(temp_b)
-		{
-			fill_num_rot_a(a, size_a, temp_b->pos_number, &temp_b->compt_a);
-			cheapest(temp_b);
-			temp_b = temp_b->next;
-		}
-		temp_b = *b;
+		
+			fill_num_rot_a(a, b, size_a, temp_b->pos_number, &temp_b->compt_a);
+		
 		printf("Before sort_b_to_a ");
 		printf("b cont = %d | compt_a = %d | compt_b = %d\n", temp_b->content, temp_b->compt_a, temp_b->compt_b);
 		sort_b_to_a(a, b, size_b);
