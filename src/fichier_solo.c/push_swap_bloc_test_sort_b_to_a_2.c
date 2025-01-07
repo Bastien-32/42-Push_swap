@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 17:30:28 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/05 17:54:05 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/07 20:04:08 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,18 +62,38 @@ void	ft_lstadd_front(t_node **lst, t_node *new)
 void	ft_lstadd_back(t_node **lst, t_node *new)
 {
 	t_node	*last;
-
-	if (!*lst)
+	
+	if (!*lst && new)
 	{
 		*lst = new;
-		return ;
+		new->next = *lst;
+        new->prev = new;
+		return;
 	}
 	last = *lst;
-	while (last->next)
+	while (last->next && last->next != *lst)
 		last = last->next;
 	last->next = new;
-	new->index = last->index + 1;
 	new->prev = last;
+	new->next = *lst;
+    (*lst)->prev = new;
+	new->index = last->index + 1;
+}
+
+int	lstsize(t_node *lst)
+{
+	int		i;
+	t_node	*temp_lst;
+	if (!lst)
+		return (0);
+	i = 1;
+	temp_lst = lst;
+	while (lst->next != temp_lst)
+	{
+		lst = lst->next;
+		i++;
+	}
+	return (i);
 }
 
 int	ft_atoi(const char *str)
@@ -130,6 +150,7 @@ void ss(t_node **a, t_node **b, int print)
 		write(1, "ss\n", 3);
 }
 
+/* 
 void	*reverse_rotate(t_node **stack)
 {
 	t_node *previous;
@@ -148,6 +169,11 @@ void	*reverse_rotate(t_node **stack)
 	last->next = *stack;
 	*stack = last;
 	return (*stack);
+} */
+void reverse_rotate(t_node **stack)
+{
+    if (*stack && (*stack)->prev != *stack)
+        *stack = (*stack)->prev;
 }
 void rra(t_node **a, int print)
 {
@@ -169,7 +195,7 @@ void rrr(t_node **a, t_node **b, int print)
 		write(1, "rrr\n", 4);
 }
 
-void	rotate(t_node **stack)
+/* void	rotate(t_node **stack)
 {
     t_node  *last;
 	t_node	*swap;
@@ -185,7 +211,14 @@ void	rotate(t_node **stack)
 	last->next = first;
 	first->next = NULL;
 	*stack = swap;
+} */
+
+void rotate(t_node **stack)
+{
+    if (*stack && (*stack)->next != *stack)
+        *stack = (*stack)->next;
 }
+
 void ra(t_node **a, int print)
 {
 	rotate(a);
@@ -206,7 +239,7 @@ void rr(t_node **a, t_node **b, int print)
 		write(1, "rr\n", 3);
 }
 
-void	push(t_node **src, t_node **dest)
+/* void	push(t_node **src, t_node **dest)
 {
 	t_node	*temp;
 
@@ -224,7 +257,36 @@ void	push(t_node **src, t_node **dest)
 		temp->next = *dest;
 		*dest = temp;
 	}
+} */
+void	push(t_node **src, t_node **dest)
+{
+	t_node	*temp;
+
+	temp = *src;
+	*src = (*src)->next;
+	if (*src == temp)
+		*src = NULL;
+	else
+	{
+		(*src)->prev = temp->prev;
+		temp->prev->next = *src;
+	}
+	if (!*dest)
+	{
+		*dest = temp;
+		temp->next = temp;
+		temp->prev = temp;
+	}
+	else
+	{
+		temp->next = *dest;
+		temp->prev = (*dest)->prev;
+		(*dest)->prev->next = temp;
+		(*dest)->prev = temp;
+		*dest = temp;
+	}
 }
+
 void	pa(t_node **a, t_node **b, int print)
 {
 	push(b, a);
@@ -238,7 +300,7 @@ void	pb(t_node **a, t_node **b, int print)
 		write(1, "pb\n", 3);
 }
 
-void	printlist(t_node *temp_a, t_node *temp_b)
+void	printalllist(t_node *temp_a, t_node *temp_b)
 {
 	while (temp_a || temp_b)
 	{
@@ -261,6 +323,21 @@ void	printlist(t_node *temp_a, t_node *temp_b)
 	}
 	printf("-   -\n");
 	printf("a   b\n");
+}
+
+void	printlist(t_node **list)
+{
+	t_node	*tl;
+
+	tl = *list;
+	printf("n    a    b    c    p    i\n");
+	while (tl)
+	{
+		printf("%d    %d    %d    %d    %d    %d\n", tl->content, tl->compt_a, tl->compt_b, tl->cheapest, tl->pos_number, tl->index);
+		tl = tl->next;
+		if (tl == *list)
+			break;
+	}
 }
 
 int	nwords(char *str, char separator)
@@ -414,12 +491,12 @@ void	init_stack(int argc, char **argv, t_node **a)
 		ft_lstadd_back(a, ft_lstnew(ft_atoi(split_argv[i++])));
 }
 
-int a_is_sorted(t_node **a)
+int a_is_sorted(t_node **a, int size_a)
 {
 	t_node	*temp;
 	
 	temp = *a;
-	while (temp->next)
+	while (size_a-- >= 0)
 	{
 		if (temp->content > temp->next->content)
 			return (0);
@@ -433,24 +510,28 @@ int	a_contain_doubles(t_node **a)
 	t_node	*temp;
 	t_node	*temp2;
 	
+	if (!*a)
+        return (0);
 	temp = *a;
 	while (temp)
 	{
 		temp2 = temp->next;
-		while (temp2)
+		while (temp2 && temp2 != *a)
 		{
 			if (temp->content == temp2->content)
 				return (1);
 			temp2 = temp2->next;
 		}
 		temp = temp->next;
+		if (temp == *a)
+			break;
 	}
 	return (0);
 }
 
-int	check_stack(t_node **a)
+int	check_stack(t_node **a, int size_a)
 {
-	if (a_is_sorted(a))
+	if (a_is_sorted(a, size_a))
 		exit (-1);
 	if (a_contain_doubles(a))
 	{
@@ -458,19 +539,6 @@ int	check_stack(t_node **a)
 		return (1);
 	}
 	return (0);
-}
-
-int	lstsize(t_node *lst)
-{
-	int		i;
-	
-	i = 0;
-	while (lst)
-	{
-		lst = lst->next;
-		i++;
-	}
-	return (i);
 }
 
 void	sort3(t_node **a, int size)
@@ -541,6 +609,8 @@ void lic(t_node **a)
 			i++;
 		}
 		temp_i = temp_i->next;
+		if (temp_i == *a)
+			break;
 	}
 }
 
@@ -555,6 +625,8 @@ int	find_max_sub_sequence(t_node **a)
 		if (temp_a->lenght > max_sub_sequence)
 			max_sub_sequence = temp_a->lenght;
 		temp_a = temp_a->next;
+		if (temp_a == *a)
+			break;
 	}
 	return(max_sub_sequence);
 }
@@ -621,41 +693,54 @@ void pos_number(t_node **a)
             if (compare->content < current->content)
                 position++;
             compare = compare->next;
+			if (compare == *a)
+				break;
         }
         current->pos_number = position;
         current = current->next;
+		if (current == *a)
+			break;
     }
 }
 
 void	first_sort(t_node **a, t_node **b, int size)
 {
 	int	i;
+	t_node	*head;
 	
 	i = size;
-	while (i--)
+	head = *a;
+	while (i > 0)
 	{
 		if ((*a)->in_lic == 0)
 		{
 			pb(a, b, 1);
 			if ((*b)->pos_number < size / 2)
-				rb(b, 1); 
+				rb(b, 1);
 		}
-		else if ((*a)->in_lic == 1)
+		else
+		{
 			ra(a, 1);
+			if (*a == head)
+				break;
+		}
+		i--;
 	}
 }
 
-void	actualize_index(t_node *b)
+void	actualize_index(t_node **b)
 {
 	t_node	*temp_b;
 	int		i;
 
 	i = 0;
-	temp_b = b;
+	temp_b = *b;
 	while (temp_b)
 	{
 		temp_b->index = i;
 		temp_b = temp_b->next;
+		if (temp_b == *b)
+			break;
 		i++;
 	}
 }
@@ -667,15 +752,39 @@ void	fill_num_rot_b(t_node *b, int size_b)
 	temp_b = b;
 	while (temp_b)
 	{
-		if (temp_b->index < size_b / 2)
+		if (temp_b->index <= size_b / 2)
 			temp_b->compt_b = temp_b->index;
 		else
 			temp_b->compt_b = temp_b->index - size_b;
 		temp_b = temp_b->next;
+		if (temp_b == b)
+			break;
 	}
 }
 
-void	fill_num_rot_a(t_node **a, t_node **b, int size_a, int pos_number_b, int *compt_a_in_b)
+void	cheapest(t_node *b)
+{
+	if(b->compt_a <= 0 && b->compt_b <= 0)
+	{
+		if (b->compt_a < b->compt_b)
+			b->cheapest = b->compt_a;
+		else
+			b->cheapest = b->compt_b;
+	}
+	else if (b->compt_a >= 0 && b->compt_b >= 0)
+	{
+		if (b->compt_a < b->compt_b)
+			b->cheapest = b->compt_b;
+		else
+			b->cheapest = b->compt_a;
+	}
+	else if (b->compt_a <= 0 && b->compt_b >= 0)
+		b->cheapest = b->compt_b - b->compt_a;
+	else if (b->compt_a >= 0 && b->compt_b <= 0)
+		b->cheapest = b->compt_a - b->compt_b;
+}
+
+/* void	fill_num_rot_a(t_node **a, t_node **b, int size_a, int pos_number_b, int *compt_a_in_b)
 {
 	t_node	*temp_a;
 	t_node	*temp_b;
@@ -704,31 +813,105 @@ void	fill_num_rot_a(t_node **a, t_node **b, int size_a, int pos_number_b, int *c
 		cheapest(temp_b);
 		temp_b = temp_b->next;
 	}
-}
-
-void	cheapest(t_node *b)
+} */
+/* 
+void	fill_num_rot_a(t_node *a, t_node *b, int size_a)
 {
-	if(b->compt_a <= 0 && b->compt_b <= 0)
+	t_node	*temp_a;
+	t_node	*temp_b;
+	
+	temp_b = b;
+	while(temp_b)
 	{
-		if (b->compt_a < b->compt_b)
-			b->cheapest = b->compt_a;
+		temp_a = a;
+		if (temp_a->pos_number > temp_b->pos_number)
+			temp_b->compt_a = 0; 
 		else
-			b->cheapest = b->compt_b;
+		{
+			while (temp_a)
+			{
+				if (temp_b->pos_number == temp_a->pos_number + 1)
+					break;
+				if (temp_b->pos_number < temp_a->pos_number)
+					break;
+				if (temp_a->next == NULL)
+					break;
+				temp_a = temp_a->next;
+				if (temp_a == a)
+					break;
+			}
+			if (temp_a->index < size_a / 2)
+				temp_b->compt_a = temp_a->index;
+			else
+				temp_b->compt_a = temp_a->index - size_a;
+		}
+		cheapest(temp_b);
+		temp_b = temp_b->next;
+		if (temp_b == b)
+			break;
 	}
-	else if (b->compt_a >= 0 && b->compt_b >= 0)
+}
+ */
+void	fill_num_rot_a(t_node *a, t_node *b, int size_a)
+{
+	t_node	*temp_a;
+	t_node	*temp_b;
+	
+	temp_a = a;
+	temp_b = b;
+	/* printf("pos before compt_a : numa =%d | numb =%d \n",
+				temp_a->content,
+				temp_b->content); */
+	while(temp_b)
 	{
-		if (b->compt_a < b->compt_b)
-			b->cheapest = b->compt_b;
+		temp_a = a;
+		while (temp_a)
+		{
+			/* printf("aposprev = %d | apos = %d | bpos = %d\n",
+				temp_a->prev->pos_number,
+				temp_a->pos_number,
+				temp_b->pos_number); */
+			if (temp_a->prev->pos_number > temp_a->pos_number &&
+				(temp_b->pos_number > temp_a->prev->pos_number || temp_b->pos_number < temp_a->pos_number))
+				break;
+			if (temp_b->pos_number > temp_a->pos_number &&
+					temp_b->pos_number > temp_a->prev->pos_number
+					&& temp_a->index == 0)
+				break;
+			else if (temp_a->prev->pos_number < temp_b->pos_number 
+					&& temp_a->pos_number > temp_b->pos_number)
+				break;
+			temp_a = temp_a->next;
+			if (temp_a == a)
+				break;
+		}
+		//printf("pour bnom = %d | aind = %d | size_a = %d\n", temp_b->content, temp_a->index, size_a);
+		if (temp_a->index < size_a / 2)
+				temp_b->compt_a = temp_a->index;
+		else if (temp_a->index == size_a / 2)
+		{
+			if (temp_b->compt_b > 0)
+				temp_b->compt_a = temp_a->index;
+			else
+				temp_b->compt_a = -temp_a->index;
+		}
 		else
-			b->cheapest = b->compt_a;
+			temp_b->compt_a = temp_a->index - size_a;
+		//printf("temp_a = %d\n", temp_b->compt_a);
+		cheapest(temp_b);
+		//printf("b_tempa =%d | b_tempb= %d | b_cheap=%d\n", temp_b->compt_a, temp_b->compt_b, temp_b->cheapest);
+		temp_b = temp_b->next;
+		if (temp_b == b)
+			break;
 	}
-	else if (b->compt_a <= 0 && b->compt_b >= 0)
-		b->cheapest = b->compt_b - b->compt_a;
-	else if (b->compt_a >= 0 && b->compt_b <= 0)
-		b->cheapest = b->compt_a - b->compt_b;
+		/* printf("after num a\nList a : \n ");
+		printlist(&temp_a);
+		printf("List b : \n ");
+		printlist(&temp_b); */
+		
 }
 
-int	search_cheapest(t_node **b)
+/* int	search_cheapest(t_node **b)
 {
 	t_node	*temp_b;
 	int		cheapest;
@@ -736,82 +919,129 @@ int	search_cheapest(t_node **b)
 
 	temp_b = *b;
 	cheapest = temp_b->cheapest;
-	if (temp_b->cheapest == 1)
-		return (1);
-	if (temp_b->cheapest == -1)
-		return (-1);
-	if (temp_b->cheapest < -1)
+	while (temp_b)
 	{
-		if (cheapest < -1 && cheapest < temp_b->cheapest)
-				cheapest = temp_b->cheapest;
+		if (temp_b->cheapest == 0)
+			return (0);
+		if (temp_b->cheapest == 1)
+			return (1);
+		if (temp_b->cheapest == -1)
+			return (-1);
+		if (temp_b->cheapest < -1)
+		{
+			if (cheapest < -1 && cheapest < temp_b->cheapest)
+					cheapest = temp_b->cheapest;
+			else
+			{
+				temp_cheapest = - temp_b->cheapest;
+				if (cheapest > temp_cheapest)
+					cheapest = temp_b->cheapest;
+			}
+		}
 		else
 		{
-			temp_cheapest = - temp_b->cheapest;
-			if (cheapest > temp_cheapest)
-				cheapest = temp_b->cheapest;
+			if (cheapest > 1 && cheapest > temp_b->cheapest)
+					cheapest = temp_b->cheapest;
+			else
+			{
+				temp_cheapest = - temp_b->cheapest;
+				if (cheapest > temp_cheapest)
+					cheapest = temp_b->cheapest;
+			}
 		}
+		temp_b = temp_b->next;
+		if (temp_b == *b)
+			break;
 	}
-	else
+	return (cheapest);
+} */
+int	search_cheapest(t_node **b)
+{
+	t_node	*temp_b;
+	int		cheapest;
+
+	temp_b = *b;
+	cheapest = temp_b->cheapest;
+	while (temp_b)
 	{
-		if (cheapest > 1 && cheapest > temp_b->cheapest)
-				cheapest = temp_b->cheapest;
-		else
-		{
-			temp_cheapest = - temp_b->cheapest;
-			if (cheapest > temp_cheapest)
-				cheapest = temp_b->cheapest;
-		}
+		if (temp_b->cheapest == 0)
+			return (0);
+		if (temp_b->cheapest == 1)
+			return (1);
+		if (temp_b->cheapest == -1)
+			return (-1);
+		if (temp_b->cheapest < -1
+					&& ((cheapest > 1 && temp_b->cheapest < cheapest)
+						|| (cheapest < -1 && temp_b->cheapest < -cheapest)))
+			cheapest = temp_b->cheapest;
+		else if (temp_b->cheapest > 1
+					&& ((cheapest < -1 && temp_b->cheapest < -cheapest)
+						|| (cheapest > 1 && temp_b->cheapest < cheapest)))
+			cheapest = temp_b->cheapest;
+		temp_b = temp_b->next;
+		if (temp_b == *b)
+			break;
 	}
 	return (cheapest);
 }
 
 void	move_ab_neg(t_node **a, t_node **b, int compt_a, int compt_b)
 {
-	printf("compt_a = %d | compt_b = %d\n", compt_a, compt_b);
 	if (compt_a != 0 && compt_b != 0)
 	{
 		while (compt_a++ < 0 || compt_b++ < 0)
+		{
 			rrr(a, b, 1);
+			compt_a++;
+			compt_b++;
+		}
 	}
 	if (compt_a == 0)
 	{
-		while (compt_b++ <= 0)
+		while (compt_b++ < 0)
 			rrb(b, 1);
 		pa(a, b, 1);
 	}
 	else
 	{
-		pa(a, b ,1);
 		while (compt_a++ < 0)
 			rra(a, 1);
+		pa(a, b ,1);
 	}
 }
 
 void	move_ab_pos(t_node **a, t_node **b, int compt_a, int compt_b)
 {
-	printf("compt_a = %d | compt_b = %d\n", compt_a, compt_b);
 	if (compt_a != 0 && compt_b != 0)
 	{
-		while (compt_a-- > 0 || compt_b-- > 0)
+		while (compt_a > 0 || compt_b > 0)
+		{
 			rr(a, b, 1);
+			compt_a--;
+			compt_b--;
+		}
 	}
-	if (compt_a == 0)
-	{
-		while (compt_b-- >= 0)
-			rb(b, 1);
+	if (compt_a == 0 && compt_b == 0)
 		pa(a, b, 1);
-	}
 	else
 	{
-		pa(a, b ,1);
-		while (compt_a-- > 0)
-			ra(a, 1);
+		if (compt_a == 0 && compt_b != 0)
+		{
+			while (compt_b-- > 0)
+				rb(b, 1);
+			pa(a, b, 1);
+		}
+		else if (compt_b == 0 && compt_a != 0)
+		{
+			pa(a, b ,1);
+			while (compt_a-- > 0)
+				rra(a, 1);
+		}
 	}
 }
 
 void	move_ab_sign_diff(t_node **a, t_node **b, int compt_a, int compt_b)
 {
-	printf("compt_a = %d | compt_b = %d\n", compt_a, compt_b);
 	if (compt_b < 0)
 	{
 		while (compt_b++ < 0)
@@ -822,7 +1052,6 @@ void	move_ab_sign_diff(t_node **a, t_node **b, int compt_a, int compt_b)
 		while (compt_b-- > 0)
 			rb(b, 1);
 	}
-	pa(a, b, 1);
 	if (compt_a < 0)
 	{
 		while (compt_a++ < 0)
@@ -833,38 +1062,46 @@ void	move_ab_sign_diff(t_node **a, t_node **b, int compt_a, int compt_b)
 		while (compt_a-- > 0)
 			ra(a, 1);
 	}
+	pa(a, b, 1);
 }
 
-void	move_number(t_node **a, t_node **b)
+void	move_number(t_node **a, t_node **b, int compt_a, int compt_b)
 {
-	if ((*b)->compt_b == 0 && (*b)->compt_a == 0)
+	printf("in MN s - numb = %d | numb b cheap = %d\n", (*b)->content,(*b)->cheapest);
+	printf(" pos *a = %d | pos *b = %d\n", (*a)->content, (*b)->content);
+	printf("compta = %d | compt_ b = %d\n", compt_a, compt_b);
+	if (compt_b == 0 && compt_a == 0)
 		pa(a, b, 1);
-	else if ((*b)->compt_a <= 0 && (*b)->compt_b <= 0)
-		move_ab_neg(a, b, (*b)->compt_a, (*b)->compt_b);
-	else if ((*b)->compt_a >= 0 && (*b)->compt_b >= 0)
-		move_ab_pos(a, b, (*b)->compt_a, (*b)->compt_b);
+	else if (compt_a <= 0 && compt_b <= 0)
+		move_ab_neg(a, b, compt_a, compt_b);
+	else if (compt_a >= 0 && compt_b >= 0)
+		move_ab_pos(a, b, compt_a, compt_b);
 	else
-		move_ab_sign_diff(a, b, (*b)->compt_a, (*b)->compt_b);
+		move_ab_sign_diff(a, b, compt_a, compt_b);
 }
 
 void	sort_b_to_a(t_node **a, t_node **b, int size_b)
 {
 	t_node	*temp_a;
 	t_node	*temp_b;
+	//t_node	*temp;
 	int		cheapest;
 	
 	temp_a = *a;
 	temp_b = *b;
-	/* while (size_b >= 0)
-	{ */
-		cheapest = search_cheapest(&temp_b);
+	cheapest = search_cheapest(&temp_b);
+	printf("cheapest = %d\n", cheapest);
+	printf("numb = %d | numb b cheap = %d\n", temp_b->content,temp_b->cheapest);
+	if (temp_b->cheapest != cheapest)
+	{
 		while (temp_b->cheapest != cheapest)
 			temp_b = temp_b->next;
-		move_number(a, b);
-		size_b = lstsize(*b);
-		//printf("b = %d\n", (*b)->content);
-		//printf("size_b = %d\n", size_b);
-	//}
+	}
+	printf("AW s - numb = %d | numb b cheap = %d\n", temp_b->content,temp_b->cheapest);
+	printf("compta = %d | compt_ b = %d\n", temp_b->compt_a, temp_b->compt_b);
+	move_number(a, b, temp_b->compt_a, temp_b->compt_b);
+	//temp_b = temp;
+	size_b = lstsize(*b);
 }
 
 void	second_sort(t_node **a, t_node **b, int size)
@@ -878,17 +1115,27 @@ void	second_sort(t_node **a, t_node **b, int size)
 	{
 		size_a = lstsize(*a);
 		size_b = lstsize(*b);
-		actualize_index(*a);
-		actualize_index(*b);
+		actualize_index(a);
+		actualize_index(b);
 		fill_num_rot_b(*b, size_b);
+		 
+		printf("before num a\nList a : \n ");
+		printlist(a);
+		printf("List b : \n ");
+		printlist(b);
 		
-			fill_num_rot_a(a, b, size_a, temp_b->pos_number, &temp_b->compt_a);
+		fill_num_rot_a(*a, *b, size_a);
+
+		printf("after num a\nList b : \n ");
+		printlist(b);
 		
-		printf("Before sort_b_to_a ");
-		printf("b cont = %d | compt_a = %d | compt_b = %d\n", temp_b->content, temp_b->compt_a, temp_b->compt_b);
+		/* printf("Before sort_b_to_a ");
+		printf("b cont = %d | compt_a = %d | compt_b = %d\n", temp_b->content, temp_b->compt_a, temp_b->compt_b); */
 		sort_b_to_a(a, b, size_b);
-		printf("After sort_b_to_a ");
-		printf("b cont = %d | compt_a = %d | compt_b = %d\n", temp_b->content, temp_b->compt_a, temp_b->compt_b);
+		/* printf("After sort_b_to_a ");
+		printf("b cont = %d | compt_a = %d | compt_b = %d\n", temp_b->content, temp_b->compt_a, temp_b->compt_b); */
+		*a = *a;
+		*b = *b;
 		if (size_b == 0)
 			break;
 	}
@@ -923,23 +1170,23 @@ int	main(int argc, char *argv[])
 {
 	t_node 	*a;
 	t_node 	*b;
-	int 	size;
+	int 	size_a;
 	
 	a = NULL;
 	b = NULL;
 	if (!check_args(argc, argv))
 	{
 		init_stack(argc, argv, &a);
-		check_stack(&a);
-		size = lstsize(a);
-		sort(&a, &b, size);
+		size_a = lstsize(a);
+		check_stack(&a, size_a);
+		sort(&a, &b, size_a);
 		
 		t_node	*temp_a;
 		t_node	*temp_b;
 		printf("Listes après tri : \n");
 		temp_a = a;
 		temp_b = b;
-		printlist(temp_a, temp_b);
+		printalllist(temp_a, temp_b);
 		
 		/* free_split(split_argv); 
 		gros doute sur le fait que ce soit free avant...*/
@@ -985,23 +1232,23 @@ int	main(int argc, char *argv[])
 	printf("Listes avant tri : \n");
 	temp_a = stack_a;
 	temp_b = stack_b;
-	printlist(temp_a, temp_b);
+	printalllist(temp_a, temp_b);
 
 	sa(&stack_a, 1);
 	temp_a = stack_a;
 	printf("Listes après tri : \n");
-	printlist(temp_a, temp_b);
+	printalllist(temp_a, temp_b);
 
 	ra(&stack_a, 1);
 	temp_a = stack_a;
 	printf("Listes après tri : \n");
-	printlist(temp_a, temp_b);
+	printalllist(temp_a, temp_b);
 
 	pb(&stack_a, &stack_b, 1);
 	temp_a = stack_a;
 	temp_b = stack_b;
 	printf("Listes après tri : \n");
-	printlist(temp_a, temp_b);
+	printalllist(temp_a, temp_b);
 
 	pb(&stack_a, &stack_b, 1);
 	pb(&stack_a, &stack_b, 1);
@@ -1009,11 +1256,11 @@ int	main(int argc, char *argv[])
 	temp_a = stack_a;
 	temp_b = stack_b;
 	printf("Listes après tri : \n");
-	printlist(temp_a, temp_b);
+	printalllist(temp_a, temp_b);
 
 	rb(&stack_b, 1);
 	temp_b = stack_b;
 	printf("Listes après tri : \n");
-	printlist(temp_a, temp_b);
+	printalllist(temp_a, temp_b);
 	return (0);
 } */
