@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/02 14:47:59 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/02 16:16:47 by badal-la         ###   ########.fr       */
+/*   Created: 2025/01/08 15:25:42 by badal-la          #+#    #+#             */
+/*   Updated: 2025/01/08 15:26:28 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,8 @@
 
 void	rotate(t_node **stack)
 {
-    t_node  *last;
-	t_node	*swap;
-	t_node	*first;
-
-	last = *stack;
-	first = *stack;
-	if (!stack || !(*stack)->next || !*stack)
-		return;
-	while (last->next)
-		last = last->next;
-	swap = first->next;
-	last->next = first;
-	first->next = NULL;
-	*stack = swap;
+	if (*stack && (*stack)->next != *stack)
+		*stack = (*stack)->next;
 }
 
 void	ra(t_node **a, int print)
@@ -36,6 +24,7 @@ void	ra(t_node **a, int print)
 	if (print)
 		write(1, "ra\n", 3);
 }
+
 void	rb(t_node **b, int print)
 {
 	rotate(b);

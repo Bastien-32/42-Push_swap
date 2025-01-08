@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/02 14:57:19 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/02 16:14:19 by badal-la         ###   ########.fr       */
+/*   Created: 2025/01/08 15:27:25 by badal-la          #+#    #+#             */
+/*   Updated: 2025/01/08 15:28:13 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,27 @@ void	push(t_node **src, t_node **dest)
 {
 	t_node	*temp;
 
-	if (!*src)
-		return ;
 	temp = *src;
 	*src = (*src)->next;
-	if (!dest)
+	if (*src == temp)
+		*src = NULL;
+	else
+	{
+		(*src)->prev = temp->prev;
+		temp->prev->next = *src;
+	}
+	if (!*dest)
 	{
 		*dest = temp;
-		temp->next = NULL;
+		temp->next = temp;
+		temp->prev = temp;
 	}
 	else
 	{
 		temp->next = *dest;
+		temp->prev = (*dest)->prev;
+		(*dest)->prev->next = temp;
+		(*dest)->prev = temp;
 		*dest = temp;
 	}
 }
@@ -38,6 +47,7 @@ void	pa(t_node **a, t_node **b, int print)
 	if (print)
 		write(1, "pa\n", 3);
 }
+
 void	pb(t_node **a, t_node **b, int print)
 {
 	push(a, b);

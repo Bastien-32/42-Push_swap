@@ -5,17 +5,17 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/02 15:09:15 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/02 16:11:32 by badal-la         ###   ########.fr       */
+/*   Created: 2025/01/08 15:39:01 by badal-la          #+#    #+#             */
+/*   Updated: 2025/01/08 18:18:36 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	nwords(char *str, char separator)
+int	nwords_ps(char *str, char separator)
 {
 	int	i;
-	int count;
+	int	count;
 
 	i = 0;
 	count = 0;
@@ -30,9 +30,9 @@ int	nwords(char *str, char separator)
 	return (count);
 }
 
-int	lenword(char *str, int i, char separator)
+int	lenword_ps(char *str, int i, char separator)
 {
-	int count;
+	int	count;
 
 	count = 0;
 	while (str[i + count] && str[i + count] != separator)
@@ -40,7 +40,7 @@ int	lenword(char *str, int i, char separator)
 	return (count);
 }
 
-static char	**free_split(char **tab)
+static char	**free_split_ps(char **tab)
 {
 	int	i;
 
@@ -51,7 +51,7 @@ static char	**free_split(char **tab)
 	return (NULL);
 }
 
-char	*ft_substr(char *str, int start, int len)
+char	*ft_substr_ps(char *str, int start, int len)
 {
 	int		i;
 	char	*dup;
@@ -69,7 +69,7 @@ char	*ft_substr(char *str, int start, int len)
 	return (dup);
 }
 
-char	**ft_split(char *str, char separator)
+char	**ft_split_ps(char *str, char separator)
 {
 	int		i;
 	int		j;
@@ -77,18 +77,18 @@ char	**ft_split(char *str, char separator)
 
 	i = 0;
 	j = 0;
-	tab = (char **)malloc(sizeof(char *) * (nwords(str, separator) + 1));
+	tab = (char **)malloc(sizeof(char *) * (nwords_ps(str, separator) + 1));
 	if (!tab)
 		return (NULL);
 	while (str[i])
 	{
 		if (str[i] != separator)
 		{
-			tab[j] = ft_substr(str, i, lenword(str, i, separator));
+			tab[j] = ft_substr_ps(str, i, lenword_ps(str, i, separator));
 			if (!tab[j])
-				return (free_split(tab));
+				return (free_split_ps(tab));
 			j++;
-			i += lenword(str, i, separator);
+			i += lenword_ps(str, i, separator);
 		}
 		else
 			i++;

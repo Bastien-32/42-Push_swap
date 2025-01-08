@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap_bloc.c                                   :+:      :+:    :+:   */
+/*   push_swap_bloc_cleaned.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 17:30:28 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/08 17:36:53 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/08 17:37:42 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ t_node	*ft_lstnew(int content)
 	node->sub_sequence = 0;
 	node->in_lic = 0;
 	node->compt_b = 0;
-	node->prev = NULL;	
+	node->prev = NULL;
 	node->next = NULL;
 	return (node);
 }
@@ -62,13 +62,13 @@ void	ft_lstadd_front(t_node **lst, t_node *new)
 void	ft_lstadd_back(t_node **lst, t_node *new)
 {
 	t_node	*last;
-	
+
 	if (!*lst && new)
 	{
 		*lst = new;
 		new->next = *lst;
-        new->prev = new;
-		return;
+		new->prev = new;
+		return ;
 	}
 	last = *lst;
 	while (last->next && last->next != *lst)
@@ -76,7 +76,7 @@ void	ft_lstadd_back(t_node **lst, t_node *new)
 	last->next = new;
 	new->prev = last;
 	new->next = *lst;
-    (*lst)->prev = new;
+	(*lst)->prev = new;
 	new->index = last->index + 1;
 }
 
@@ -84,6 +84,7 @@ int	lstsize(t_node *lst)
 {
 	int		i;
 	t_node	*temp_lst;
+
 	if (!lst)
 		return (0);
 	i = 1;
@@ -121,28 +122,28 @@ int	ft_atoi(const char *str)
  
 void	swap(t_node **stack)
 {
-    t_node  *swap;
+	t_node	*swap;
 
-    if (!*stack || !(*stack)->next)
-        return;
-    swap = (*stack)->next;
-    (*stack)->next = swap->next;
-    swap->next = *stack;
+	if (!*stack || !(*stack)->next)
+		return;
+	swap = (*stack)->next;
+	(*stack)->next = swap->next;
+	swap->next = *stack;
 	*stack = swap;
 }
-void sa(t_node **a, int print)
+void	sa(t_node **a, int print)
 {
 	swap(a);
 	if (print)
 		write(1, "sa\n", 3);
 }
-void sb(t_node **b, int print)
+void	sb(t_node **b, int print)
 {
 	swap(b);
 	if (print)
 		write(1, "sb\n", 3);
 }
-void ss(t_node **a, t_node **b, int print)
+void	ss(t_node **a, t_node **b, int print)
 {
 	swap(a);
 	swap(b);
@@ -150,44 +151,24 @@ void ss(t_node **a, t_node **b, int print)
 		write(1, "ss\n", 3);
 }
 
-/* 
-void	*reverse_rotate(t_node **stack)
+void	reverse_rotate(t_node **stack)
 {
-	t_node *previous;
-    t_node  *last;
-
-	previous = NULL;
-	last = *stack;
-    if (!stack || !(*stack)->next || !*stack)
-        return(*stack);
-    while (last->next)
-	{
-		previous = last;
-		last = last->next;
-	}
-	previous->next = NULL;
-	last->next = *stack;
-	*stack = last;
-	return (*stack);
-} */
-void reverse_rotate(t_node **stack)
-{
-    if (*stack && (*stack)->prev != *stack)
-        *stack = (*stack)->prev;
+	if (*stack && (*stack)->prev != *stack)
+		*stack = (*stack)->prev;
 }
-void rra(t_node **a, int print)
+void	rra(t_node **a, int print)
 {
 	reverse_rotate(a);
 	if (print)
 		write(1, "rra\n", 4);
 }
-void rrb(t_node **b, int print)
+void	rrb(t_node **b, int print)
 {
 	reverse_rotate(b);
 	if (print)
 		write(1, "rrb\n", 4);
 }
-void rrr(t_node **a, t_node **b, int print)
+void	rrr(t_node **a, t_node **b, int print)
 {
 	reverse_rotate(a);
 	reverse_rotate(b);
@@ -195,43 +176,24 @@ void rrr(t_node **a, t_node **b, int print)
 		write(1, "rrr\n", 4);
 }
 
-/* void	rotate(t_node **stack)
+void	rotate(t_node **stack)
 {
-    t_node  *last;
-	t_node	*swap;
-	t_node	*first;
-
-	last = *stack;
-	first = *stack;
-    if (!stack || !(*stack)->next || !*stack)
-        return;
-    while (last->next)
-		last = last->next;
-	swap = first->next;
-	last->next = first;
-	first->next = NULL;
-	*stack = swap;
-} */
-
-void rotate(t_node **stack)
-{
-    if (*stack && (*stack)->next != *stack)
-        *stack = (*stack)->next;
+	if (*stack && (*stack)->next != *stack)
+		*stack = (*stack)->next;
 }
-
-void ra(t_node **a, int print)
+void	ra(t_node **a, int print)
 {
 	rotate(a);
 	if (print)
 		write(1, "ra\n", 3);
 }
-void rb(t_node **b, int print)
+void	rb(t_node **b, int print)
 {
 	rotate(b);
 	if (print)
 		write(1, "rb\n", 3);
 }
-void rr(t_node **a, t_node **b, int print)
+void	rr(t_node **a, t_node **b, int print)
 {
 	rotate(a);
 	rotate(b);
@@ -239,25 +201,6 @@ void rr(t_node **a, t_node **b, int print)
 		write(1, "rr\n", 3);
 }
 
-/* void	push(t_node **src, t_node **dest)
-{
-	t_node	*temp;
-
-	if (!*src)
-		return ;
-	temp = *src;
-	*src = (*src)->next;
-	if (!dest)
-	{
-		*dest = temp;
-		temp->next = NULL;
-	}
-	else
-	{
-		temp->next = *dest;
-		*dest = temp;
-	}
-} */
 void	push(t_node **src, t_node **dest)
 {
 	t_node	*temp;
@@ -286,7 +229,6 @@ void	push(t_node **src, t_node **dest)
 		*dest = temp;
 	}
 }
-
 void	pa(t_node **a, t_node **b, int print)
 {
 	push(b, a);
@@ -298,31 +240,6 @@ void	pb(t_node **a, t_node **b, int print)
 	push(a, b);
 	if (print)
 		write(1, "pb\n", 3);
-}
-
-void	printalllist(t_node *temp_a, t_node *temp_b)
-{
-	while (temp_a || temp_b)
-	{
-		if (temp_a && temp_b)
-		{
-			printf("%d  %d\n", temp_a->content, temp_b->content);
-			temp_a = temp_a->next;
-			temp_b = temp_b->next;
-		}
-		else if (temp_a)
-		{
-			printf("%d     \n", temp_a->content);
-			temp_a = temp_a->next;
-		}
-		else if (temp_b)
-		{
-			printf("     %d\n", temp_b->content);
-			temp_b = temp_b->next;
-		}
-	}
-	printf("-   -\n");
-	printf("a   b\n");
 }
 
 void	printlist(t_node **list)
@@ -430,9 +347,9 @@ void	ft_putstr(char *str)
 int	is_number(const char *str)
 {
 	int	i;
-	
+
 	i = 0;
-	while(str[i])
+	while (str[i])
 	{
 		while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
 			i++;
@@ -448,7 +365,8 @@ int	is_number(const char *str)
 
 char	**parse_args(int argc, char **argv)
 {
-	char		**split_argv;
+	char	**split_argv;
+
 	if (argc == 2)
 	{
 		split_argv = ft_split(argv[1], ' ');
@@ -456,18 +374,18 @@ char	**parse_args(int argc, char **argv)
 			return (NULL);
 		return (split_argv);
 	}
-		return (argv + 1);
+	return (argv + 1);
 }
 
-int check_args(int argc, char **argv)
+int	check_args(int argc, char **argv)
 {
 	int	i;
 
 	i = 1;
-	if(argc == 1)
+	if (argc == 1)
 		return (1);
 	while (argv[i])
-	{	
+	{
 		if (!is_number(argv[i]))
 			return (1);
 		i++;
@@ -479,7 +397,7 @@ void	init_stack(int argc, char **argv, t_node **a)
 {
 	int		i;
 	char	**split_argv;
-	
+
 	if (argc == 2)
 		split_argv = parse_args(argc, argv);
 	else
@@ -491,7 +409,7 @@ void	init_stack(int argc, char **argv, t_node **a)
 		ft_lstadd_back(a, ft_lstnew(ft_atoi(split_argv[i++])));
 }
 
-int a_is_sorted(t_node **a, int size_a)
+int	a_is_sorted(t_node **a, int size_a)
 {
 	t_node	*temp;
 	
@@ -509,9 +427,9 @@ int	a_contain_doubles(t_node **a)
 {
 	t_node	*temp;
 	t_node	*temp2;
-	
+
 	if (!*a)
-        return (0);
+		return (0);
 	temp = *a;
 	while (temp)
 	{
@@ -524,7 +442,7 @@ int	a_contain_doubles(t_node **a)
 		}
 		temp = temp->next;
 		if (temp == *a)
-			break;
+			break ;
 	}
 	return (0);
 }
@@ -556,44 +474,25 @@ void	sort3(t_node **a, int size)
 		}
 	}
 }
-/* void	sort5(t_node **a, t_node **b, int size)
-{
-	t_node	*temp_a;
-	
-	temp_a = *a;
-	if (size == 5)
-	{
-		while (temp_a && temp_a->content > (*a)->content)
-		{
-		
-		}
-	}
-} */
-/* void	sort10(t_node **a, int size)
-{
-	if (size < 10)
-	{
-		
-	}
-} */
 
-void update_lenghts(t_node *temp_i, t_node *temp_j, int i)
+void	update_lenghts(t_node *temp_i, t_node *temp_j, int i)
 {
-	int 	temp_lenght;
-	temp_lenght = temp_j->lenght + 1;
-	if(temp_lenght >= temp_i->lenght)
+	int		temp_lenght;
+
+	temp_lenght = temp_j->lenght + 1;	
+	if (temp_lenght >= temp_i->lenght)
 	{
 		temp_i->lenght = temp_lenght;
-		if(i >= temp_i->sub_sequence)
+		if (i >= temp_i->sub_sequence)
 			temp_i->sub_sequence = i;
 	}
 }
 
-void lic(t_node **a)
+void	lis(t_node **a)
 {
 	t_node	*temp_i;
 	t_node	*temp_j;
-	int 	temp_lenght;
+	int		temp_lenght;
 	int		i;
 
 	temp_i = (*a)->next;
@@ -610,28 +509,28 @@ void lic(t_node **a)
 		}
 		temp_i = temp_i->next;
 		if (temp_i == *a)
-			break;
+			break ;
 	}
 }
 
 int	find_max_sub_sequence(t_node **a)
 {
-	t_node 	*temp_a;
+	t_node	*temp_a;
 	int		max_sub_sequence;
 
-	max_sub_sequence = temp_a->lenght;	
+	max_sub_sequence = temp_a->lenght;
 	while (temp_a)
 	{
 		if (temp_a->lenght > max_sub_sequence)
 			max_sub_sequence = temp_a->lenght;
 		temp_a = temp_a->next;
 		if (temp_a == *a)
-			break;
+			break ;
 	}
-	return(max_sub_sequence);
+	return (max_sub_sequence);
 }
 
-void	fill_lic(int index, int next_subsequence, t_node *temp_a, int temp)
+void	fill_lis(int index, int next_subsequence, t_node *temp_a, int temp)
 {
 	while (1)
 	{
@@ -648,19 +547,19 @@ void	fill_lic(int index, int next_subsequence, t_node *temp_a, int temp)
 				while (temp_a)
 				{
 					if (temp_a->prev == NULL)
-						break;
+						break ;
 					temp_a = temp_a->prev;
 				}
 				if (temp_a->content < temp)
 					temp_a->in_lic = 1;
 			}
-			break;
+			break ;
 		}
 		temp_a = temp_a->prev;
 	}
 }
 
-void	is_in_lic(t_node **a)
+void	is_in_lis(t_node **a)
 {
 	t_node	*temp_a;
 	int		max_sub_sequence;
@@ -675,39 +574,40 @@ void	is_in_lic(t_node **a)
 	temp_a->in_lic = 1;
 	next_subsequence = temp_a->sub_sequence;
 	temp_a = temp_a->prev;
-	fill_lic(temp_a->index, next_subsequence, temp_a, temp);
+	fill_lis(temp_a->index, next_subsequence, temp_a, temp);
 }
-void pos_number(t_node **a)
-{
-    t_node *current;
-    t_node *compare;
-    int position;
 
-    current = *a;
-    while (current)
-    {
-        position = 1;
-        compare = *a;
-        while (compare)
-        {
-            if (compare->content < current->content)
-                position++;
-            compare = compare->next;
+void	pos_number(t_node **a)
+{
+	t_node	*current;
+	t_node	*compare;
+	int		position;
+
+	current = *a;
+	while (current)
+	{
+		position = 1;
+		compare = *a;
+		while (compare)
+		{
+			if (compare->content < current->content)
+				position++;
+			compare = compare->next;
 			if (compare == *a)
-				break;
-        }
-        current->pos_number = position;
-        current = current->next;
+				break ;
+		}
+		current->pos_number = position;
+		current = current->next;
 		if (current == *a)
-			break;
-    }
+			break ;
+	}
 }
 
 void	first_sort(t_node **a, t_node **b, int size)
 {
-	int	i;
+	int		i;
 	t_node	*head;
-	
+
 	i = size;
 	head = *a;
 	while (i > 0)
@@ -722,7 +622,7 @@ void	first_sort(t_node **a, t_node **b, int size)
 		{
 			ra(a, 1);
 			if (*a == head)
-				break;
+				break ;
 		}
 		i--;
 	}
@@ -745,7 +645,7 @@ void	actualize_index(t_node **b)
 	}
 }
 
-void	fill_num_rot_b(t_node *b, int size_b)
+void	fill_num_moves_b(t_node *b, int size_b)
 {
 	t_node	*temp_b;
 
@@ -784,230 +684,63 @@ void	cheapest(t_node *b)
 		b->cheapest = b->compt_a - b->compt_b;
 }
 
-/* void	fill_num_rot_a(t_node **a, t_node **b, int size_a, int pos_number_b, int *compt_a_in_b)
+t_node	*search_pos_b_in_a(t_node *a, t_node *temp_b)
 {
 	t_node	*temp_a;
-	t_node	*temp_b;
-	
-	temp_a = *a;
-	temp_b = *b;
-	while(temp_b)
-	{
-		if (temp_a->pos_number > pos_number_b)
-			*compt_a_in_b = 0;
-		else
-		{
-			while (temp_a)
-			{
-				if (pos_number_b == temp_a->pos_number + 1)
-					break;
-				if (temp_a->next == NULL)
-					break;
-				temp_a = temp_a->next;
-			}
-			if (temp_a->index < size_a / 2)
-				*compt_a_in_b = temp_a->index;
-			else
-				*compt_a_in_b = temp_a->index - size_a;
-		}
-		cheapest(temp_b);
-		temp_b = temp_b->next;
-	}
-} */
-/* 
-void	fill_num_rot_a(t_node *a, t_node *b, int size_a)
-{
-	t_node	*temp_a;
-	t_node	*temp_b;
-	
-	temp_b = b;
-	while(temp_b)
-	{
-		temp_a = a;
-		if (temp_a->pos_number > temp_b->pos_number)
-			temp_b->compt_a = 0; 
-		else
-		{
-			while (temp_a)
-			{
-				if (temp_b->pos_number == temp_a->pos_number + 1)
-					break;
-				if (temp_b->pos_number < temp_a->pos_number)
-					break;
-				if (temp_a->next == NULL)
-					break;
-				temp_a = temp_a->next;
-				if (temp_a == a)
-					break;
-			}
-			if (temp_a->index < size_a / 2)
-				temp_b->compt_a = temp_a->index;
-			else
-				temp_b->compt_a = temp_a->index - size_a;
-		}
-		cheapest(temp_b);
-		temp_b = temp_b->next;
-		if (temp_b == b)
-			break;
-	}
-}
- */
-/* 
-void	fill_num_rot_a(t_node *a, t_node *b, int size_a)
-{
-	t_node	*temp_a;
-	t_node	*temp_b;
-	
+
 	temp_a = a;
-	temp_b = b;
-	// printf("pos before compt_a : numa =%d | numb =%d \n",
-	// 			temp_a->content,
-	// 			temp_b->content);
-	while(temp_b)
+	while (temp_a)
 	{
-		temp_a = a;
-		while (temp_a)
-		{
-			// printf("aposprev = %d | apos = %d | bpos = %d\n",
-			// 	temp_a->prev->pos_number,
-			// 	temp_a->pos_number,
-			// 	temp_b->pos_number);
-			if (temp_a->prev->pos_number > temp_a->pos_number
-				&& (temp_b->pos_number > temp_a->prev->pos_number
+		if (temp_b->pos_number > temp_a->prev->pos_number
+			&& temp_b->pos_number < temp_a->pos_number)
+			break ;
+		if (temp_a->prev->pos_number > temp_a->pos_number
+			&& (temp_b->pos_number > temp_a->prev->pos_number
 				|| temp_b->pos_number < temp_a->pos_number))
-				break;
-			if (temp_b->pos_number > temp_a->pos_number &&
-					temp_b->pos_number > temp_a->prev->pos_number
-					&& temp_a->index == 0)
-				break;
-			else if (temp_a->prev->pos_number < temp_b->pos_number 
-					&& temp_a->pos_number > temp_b->pos_number)
-				break;
-			temp_a = temp_a->next;
-			if (temp_a == a)
-				break;
-		}
-		//printf("pour bnom = %d | aind = %d | size_a = %d\n", temp_b->content, temp_a->index, size_a);
-		if (temp_a->index < size_a / 2)
-				temp_b->compt_a = temp_a->index;
-		else if (temp_a->index == size_a / 2)
-		{
-			if (temp_b->compt_b > 0)
-				temp_b->compt_a = temp_a->index;
-			else
-				temp_b->compt_a = -temp_a->index;
-		}
-		else
-			temp_b->compt_a = temp_a->index - size_a;
-		//printf("temp_a = %d\n", temp_b->compt_a);
-		cheapest(temp_b);
-		//printf("b_tempa =%d | b_tempb= %d | b_cheap=%d\n", temp_b->compt_a, temp_b->compt_b, temp_b->cheapest);
-		temp_b = temp_b->next;
-		if (temp_b == b)
-			break;
+			break ;
+		temp_a = temp_a->next;
+		if (temp_a == a)
+			break ;
 	}
-		// printf("after num a\nList a : \n ");
-		// printlist(&temp_a);
-		// printf("List b : \n ");
-		// printlist(&temp_b);
-		
-} */
+	return (temp_a);
+}
 
-void	fill_num_rot_a(t_node *a, t_node *b, int size_a)
+void	fill_num_moves_a(t_node *a, t_node *b, int size_a)
 {
 	t_node	*temp_a;
 	t_node	*temp_b;
-	
-	temp_a = a;
-	temp_b = b;
-	// printf("pos before compt_a : numa =%d | numb =%d \n",
-	// 			temp_a->content,
-	// 			temp_b->content);
-	while(temp_b)
-	{
-		temp_a = a;
-		while (temp_a)
-		{
-			if (temp_b->pos_number > temp_a->prev->pos_number
-					&& temp_b->pos_number < temp_a->pos_number)
-				break;
-			if (temp_a->prev->pos_number > temp_a->pos_number
-        			&& (temp_b->pos_number > temp_a->prev->pos_number
-					|| temp_b->pos_number < temp_a->pos_number))
-        		break;
-			temp_a = temp_a->next;
-			if (temp_a == a)
-				break;
-		}
-		//printf("pour bnom = %d | aind = %d | size_a = %d\n", temp_b->content, temp_a->index, size_a);
-		if (temp_a->index < size_a / 2)
-				temp_b->compt_a = temp_a->index;
-		else if (temp_a->index == size_a / 2)
-		{
-			if (temp_b->compt_b > 0)
-				temp_b->compt_a = temp_a->index;
-			else
-				temp_b->compt_a = -temp_a->index;
-		}
-		else
-			temp_b->compt_a = temp_a->index - size_a;
-		//printf("temp_a = %d\n", temp_b->compt_a);
-		cheapest(temp_b);
-		//printf("b_tempa =%d | b_tempb= %d | b_cheap=%d\n", temp_b->compt_a, temp_b->compt_b, temp_b->cheapest);
-		temp_b = temp_b->next;
-		if (temp_b == b)
-			break;
-	}
-		// printf("after num a\nList a : \n ");
-		// printlist(&a);
-		// printf("List b : \n ");
-		// printlist(&temp_b);
-		
-} 
-/* int	search_cheapest(t_node **b)
-{
-	t_node	*temp_b;
-	int		cheapest;
-	int		temp_cheapest;
 
-	temp_b = *b;
-	cheapest = temp_b->cheapest;
+	temp_b = b;
 	while (temp_b)
 	{
-		if (temp_b->cheapest == 0)
-			return (0);
-		if (temp_b->cheapest == 1)
-			return (1);
-		if (temp_b->cheapest == -1)
-			return (-1);
-		if (temp_b->cheapest < -1)
+		temp_a = search_pos_b_in_a(a, temp_b);
+		if (temp_a->index < size_a / 2)
+			temp_b->compt_a = temp_a->index;
+		else if (temp_a->index == size_a / 2)
 		{
-			if (cheapest < -1 && cheapest < temp_b->cheapest)
-					cheapest = temp_b->cheapest;
+			if (temp_b->compt_b > 0)
+				temp_b->compt_a = temp_a->index;
 			else
-			{
-				temp_cheapest = - temp_b->cheapest;
-				if (cheapest > temp_cheapest)
-					cheapest = temp_b->cheapest;
-			}
+				temp_b->compt_a = -temp_a->index;
 		}
 		else
-		{
-			if (cheapest > 1 && cheapest > temp_b->cheapest)
-					cheapest = temp_b->cheapest;
-			else
-			{
-				temp_cheapest = - temp_b->cheapest;
-				if (cheapest > temp_cheapest)
-					cheapest = temp_b->cheapest;
-			}
-		}
+			temp_b->compt_a = temp_a->index - size_a;
+		cheapest(temp_b);
 		temp_b = temp_b->next;
-		if (temp_b == *b)
-			break;
+		if (temp_b == b)
+			break ;
 	}
-	return (cheapest);
-} */
+}
+
+int	cheapest_cond(int cheapest)
+{
+	if (cheapest == 0)
+		return (0);
+	if (cheapest == 1)
+		return (1);
+	return (-1);
+}
+
 int	search_cheapest(t_node **b)
 {
 	t_node	*temp_b;
@@ -1017,23 +750,22 @@ int	search_cheapest(t_node **b)
 	cheapest = temp_b->cheapest;
 	while (temp_b)
 	{
-		if (temp_b->cheapest == 0)
-			return (0);
-		if (temp_b->cheapest == 1)
-			return (1);
-		if (temp_b->cheapest == -1)
-			return (-1);
+		if (cheapest >= -1 && cheapest <= 1)
+		{
+			cheapest = cheapest_cond(temp_b->cheapest);
+			return (cheapest);
+		}
 		if (temp_b->cheapest < -1
-					&& ((cheapest > 1 && temp_b->cheapest < cheapest)
-						|| (cheapest < -1 && temp_b->cheapest < -cheapest)))
+			&& ((cheapest > 1 && temp_b->cheapest < cheapest)
+				|| (cheapest < -1 && temp_b->cheapest < -cheapest)))
 			cheapest = temp_b->cheapest;
 		else if (temp_b->cheapest > 1
-					&& ((cheapest < -1 && temp_b->cheapest < -cheapest)
-						|| (cheapest > 1 && temp_b->cheapest < cheapest)))
+			&& ((cheapest < -1 && temp_b->cheapest < -cheapest)
+				|| (cheapest > 1 && temp_b->cheapest < cheapest)))
 			cheapest = temp_b->cheapest;
 		temp_b = temp_b->next;
 		if (temp_b == *b)
-			break;
+			break ;
 	}
 	return (cheapest);
 }
@@ -1082,14 +814,13 @@ void	move_ab_pos(t_node **a, t_node **b, int compt_a, int compt_b)
 		{
 			while (compt_b-- > 0)
 				rb(b, 1);
-			pa(a, b, 1);
 		}
 		else if (compt_b == 0 && compt_a != 0)
 		{
 			while (compt_a-- > 0)
 				ra(a, 1);
-			pa(a, b ,1);
 		}
+		pa(a, b, 1);
 	}
 }
 
@@ -1135,7 +866,7 @@ void	sort_b_to_a(t_node **a, t_node **b, int size_b)
 	t_node	*temp_a;
 	t_node	*temp_b;
 	int		cheapest;
-	
+
 	temp_a = *a;
 	temp_b = *b;
 	cheapest = search_cheapest(&temp_b);
@@ -1145,33 +876,9 @@ void	sort_b_to_a(t_node **a, t_node **b, int size_b)
 			temp_b = temp_b->next;
 	}
 	move_number(a, b, temp_b->compt_a, temp_b->compt_b);
-	//temp_b = temp;
 	size_b = lstsize(*b);
 }
 
-/* void	second_sort(t_node **a, t_node **b, int size)
-{
-	int		size_a;
-	int		size_b;
-	t_node	*temp_b;
-	
-	temp_b = *b;
-	while(1)
-	{
-		size_a = lstsize(*a);
-		size_b = lstsize(*b);
-		actualize_index(a);
-		actualize_index(b);
-		fill_num_rot_b(*b, size_b);
-		fill_num_rot_a(*a, *b, size_a);
-		sort_b_to_a(a, b, size_b);
-		*a = *a;
-		*b = *b;
-		if (size_b == 0)
-			break;
-	}
-		printf("uhu\n");
-} */
 void	second_sort(t_node **a, t_node **b, int size)
 {
 	int		size_a;
@@ -1185,13 +892,13 @@ void	second_sort(t_node **a, t_node **b, int size)
 		size_b = lstsize(*b);
 		actualize_index(a);
 		actualize_index(b);
-		fill_num_rot_b(*b, size_b);
-		fill_num_rot_a(*a, *b, size_a);
+		fill_num_moves_b(*b, size_b);
+		fill_num_moves_a(*a, *b, size_a);
 		sort_b_to_a(a, b, size_b);
 	}
 }
 
-void	move_first_numb_on_top(t_node **a)
+void	move_first_num_on_top(t_node **a)
 {
 	t_node	*temp_a;
 	int		pos_number_in_a;
@@ -1225,13 +932,13 @@ void	big_sorts(t_node **a, t_node **b, int size)
 	
 	if (size > 3)
 	{
-		lic(a);
-		is_in_lic(a);
+		lis(a);
+		is_in_lis(a);
 		pos_number(a);
 		first_sort(a, b, size);
 		//printf("First sort finish\n");
 		second_sort(a, b, size);
-		move_first_numb_on_top(a);
+		move_first_num_on_top(a);
 	}
 }
 
@@ -1242,7 +949,7 @@ void	sort(t_node **a, t_node **b, int size)
 		if ((*a)->content > (*a)->next->content)
 			sa(a, 1);
 	}
-	sort3(a, size);	
+	sort3(a, size);
 	big_sorts(a, b, size);
 	//sort10(&a, size);
 }
@@ -1263,83 +970,7 @@ int	main(int argc, char *argv[])
 		sort(&a, &b, size_a);
 		
 		printlist(&a);
-		
-		/* free_split(split_argv); 
-		gros doute sur le fait que ce soit free avant...*/
 	}
 	else
 		write(1, "Error\n", 6);
 }
-
-/* suite de chiffres pour test : 
-00 04 12 02 10 06 09 13 03 11 07 15 56 -12 23 32
- */
-/* 
-//test commandes
-int	main(int argc, char *argv[])
-{
-	int		i = 1;
-	t_node	*stack_a;
-	t_node	*stack_b;
-	t_node	*temp_a;
-	t_node	*temp_b;
-	
-	if (argc <= 1)
-	{
-		write(1, "Error", 5);
-		return (1);
-	}
-	while (argv[i])
-	{
-		if (!is_number(argv[i]))
-		{
-			write(1, "Error", 5);
-			return (1);
-		}
-		i++;
-	}
-	
-	stack_a = ft_lstnew(atoi(argv[1]));
-	stack_b = NULL;
-	i = 2;
-	while (argv[i])
-	{
-		temp_a = ft_lstnew(atoi(argv[i]));
-		ft_lstadd_back(&stack_a, temp_a);
-		i++;
-	}
-	printf("Listes avant tri : \n");
-	temp_a = stack_a;
-	temp_b = stack_b;
-	printalllist(temp_a, temp_b);
-
-	sa(&stack_a, 1);
-	temp_a = stack_a;
-	printf("Listes après tri : \n");
-	printalllist(temp_a, temp_b);
-
-	ra(&stack_a, 1);
-	temp_a = stack_a;
-	printf("Listes après tri : \n");
-	printalllist(temp_a, temp_b);
-
-	pb(&stack_a, &stack_b, 1);
-	temp_a = stack_a;
-	temp_b = stack_b;
-	printf("Listes après tri : \n");
-	printalllist(temp_a, temp_b);
-
-	pb(&stack_a, &stack_b, 1);
-	pb(&stack_a, &stack_b, 1);
-	pb(&stack_a, &stack_b, 1);
-	temp_a = stack_a;
-	temp_b = stack_b;
-	printf("Listes après tri : \n");
-	printalllist(temp_a, temp_b);
-
-	rb(&stack_b, 1);
-	temp_b = stack_b;
-	printf("Listes après tri : \n");
-	printalllist(temp_a, temp_b);
-	return (0);
-} */

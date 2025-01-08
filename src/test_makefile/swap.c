@@ -5,23 +5,22 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/02 14:56:10 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/02 16:17:13 by badal-la         ###   ########.fr       */
+/*   Created: 2025/01/08 15:19:55 by badal-la          #+#    #+#             */
+/*   Updated: 2025/01/08 15:21:21 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-
 void	swap(t_node **stack)
 {
-    t_node  *swap;
+	t_node	*swap;
 
-    if (!*stack || !(*stack)->next)
-        return;
-    swap = (*stack)->next;
-    (*stack)->next = swap->next;
-    swap->next = *stack;
+	if (!*stack || !(*stack)->next)
+		return ;
+	swap = (*stack)->next;
+	(*stack)->next = swap->next;
+	swap->next = *stack;
 	*stack = swap;
 }
 

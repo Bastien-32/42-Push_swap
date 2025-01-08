@@ -1,32 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/25 17:30:28 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/08 18:20:10 by badal-la         ###   ########.fr       */
+/*   Created: 2025/01/08 12:48:01 by badal-la          #+#    #+#             */
+/*   Updated: 2025/01/08 16:20:53 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	main(int argc, char *argv[])
+int	lstsize_ps(t_node *lst)
 {
-	t_node	*a;
-	t_node	*b;
-	int		size_a;
+	int		i;
+	t_node	*temp_lst;
 
-	a = NULL;
-	b = NULL;
-	if (!check_args(argc, argv))
+	if (!lst)
+		return (0);
+	i = 1;
+	temp_lst = lst;
+	while (lst->next != temp_lst)
 	{
-		init_stack(argc, argv, &a);
-		size_a = lstsize_ps(a);
-		check_stack(&a, size_a);
-		sort(&a, &b, size_a);
+		lst = lst->next;
+		i++;
 	}
-	else
-		write(1, "Error\n", 6);
+	return (i);
 }

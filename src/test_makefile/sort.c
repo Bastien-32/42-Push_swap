@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sorts.c                                            :+:      :+:    :+:   */
+/*   sort.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/02 15:18:24 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/02 16:27:44 by badal-la         ###   ########.fr       */
+/*   Created: 2025/01/08 13:00:09 by badal-la          #+#    #+#             */
+/*   Updated: 2025/01/08 18:04:18 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ void	sort(t_node **a, t_node **b, int size)
 			sa(a, 1);
 	}
 	sort3(a, size);
-	sort5(a, b, size);
-	//sort10(&a, size);
+	big_sorts(a, b, size);
 }
 
 void	sort3(t_node **a, int size)
@@ -39,19 +38,16 @@ void	sort3(t_node **a, int size)
 		}
 	}
 }
-void	sort5(t_node **a, t_node **b, int size)
+
+void	big_sorts(t_node **a, t_node **b, int size)
 {
-	if (size == 5)
+	if (size > 3)
 	{
-		pa(a, b, 1);
+		lis(a);
+		is_in_lis(a);
+		pos_number(a);
+		first_sort(a, b, size);
+		second_sort(a, b);
+		move_first_num_on_top(a);
 	}
 }
-
-/* void	sort10(t_node **a, int size)
-{
-	if (size < 10)
-	{
-		
-	}
-} */
-

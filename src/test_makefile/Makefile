@@ -1,11 +1,11 @@
-LIBC = check_args_and_stack.c ft_split_ps.c init_stack.c lib_utils.c push_swap.c \
-		sorts.c push.c rotate.c reverse_rotate.c swap.c\
+SRC = big_sorts.c check_args_and_stack.c ft_split_ps.c init_stack.c \
+		move_number.c push_swap.c push.c reverse_rotate.c rotate.c \
+		second_sort.c sort_b_to_a.c sort.c swap.c utils_sort.c utils.c \
 
-SRC = ${LIBC}
 
 OBJS = ${SRC:.c=.o}
 
-NAME = push_swap.a 
+NAME = push_swap 
 
 CC = gcc
 
@@ -16,10 +16,13 @@ FLAGS = -Wall -Werror -Wextra
 
 all: ${NAME}
 
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+
 clean:
 		rm -f ${OBJS}
 
-fclean: clean;
+fclean: clean
 		rm -f ${NAME}
 
 re:	fclean all

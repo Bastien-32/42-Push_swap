@@ -5,32 +5,17 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/02 14:53:38 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/02 16:15:48 by badal-la         ###   ########.fr       */
+/*   Created: 2025/01/08 15:22:34 by badal-la          #+#    #+#             */
+/*   Updated: 2025/01/08 15:24:14 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-
-void	*reverse_rotate(t_node **stack)
+void	reverse_rotate(t_node **stack)
 {
-	t_node	*previous;
-	t_node	*last;
-
-	previous = NULL;
-	last = *stack;
-	if (!stack || !(*stack)->next || !*stack)
-		return(*stack);
-	while (last->next)
-	{
-		previous = last;
-		last = last->next;
-	}
-	previous->next = NULL;
-	last->next = *stack;
-	*stack = last;
-	return (*stack);
+	if (*stack && (*stack)->prev != *stack)
+		*stack = (*stack)->prev;
 }
 
 void	rra(t_node **a, int print)
@@ -46,6 +31,7 @@ void	rrb(t_node **b, int print)
 	if (print)
 		write(1, "rrb\n", 4);
 }
+
 void	rrr(t_node **a, t_node **b, int print)
 {
 	reverse_rotate(a);
