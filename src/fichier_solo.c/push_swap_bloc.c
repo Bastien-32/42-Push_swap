@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 17:30:28 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/07 20:04:08 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/08 12:01:06 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -852,6 +852,7 @@ void	fill_num_rot_a(t_node *a, t_node *b, int size_a)
 	}
 }
  */
+/* 
 void	fill_num_rot_a(t_node *a, t_node *b, int size_a)
 {
 	t_node	*temp_a;
@@ -859,20 +860,21 @@ void	fill_num_rot_a(t_node *a, t_node *b, int size_a)
 	
 	temp_a = a;
 	temp_b = b;
-	/* printf("pos before compt_a : numa =%d | numb =%d \n",
-				temp_a->content,
-				temp_b->content); */
+	// printf("pos before compt_a : numa =%d | numb =%d \n",
+	// 			temp_a->content,
+	// 			temp_b->content);
 	while(temp_b)
 	{
 		temp_a = a;
 		while (temp_a)
 		{
-			/* printf("aposprev = %d | apos = %d | bpos = %d\n",
-				temp_a->prev->pos_number,
-				temp_a->pos_number,
-				temp_b->pos_number); */
-			if (temp_a->prev->pos_number > temp_a->pos_number &&
-				(temp_b->pos_number > temp_a->prev->pos_number || temp_b->pos_number < temp_a->pos_number))
+			// printf("aposprev = %d | apos = %d | bpos = %d\n",
+			// 	temp_a->prev->pos_number,
+			// 	temp_a->pos_number,
+			// 	temp_b->pos_number);
+			if (temp_a->prev->pos_number > temp_a->pos_number
+				&& (temp_b->pos_number > temp_a->prev->pos_number
+				|| temp_b->pos_number < temp_a->pos_number))
 				break;
 			if (temp_b->pos_number > temp_a->pos_number &&
 					temp_b->pos_number > temp_a->prev->pos_number
@@ -904,13 +906,64 @@ void	fill_num_rot_a(t_node *a, t_node *b, int size_a)
 		if (temp_b == b)
 			break;
 	}
-		/* printf("after num a\nList a : \n ");
-		printlist(&temp_a);
-		printf("List b : \n ");
-		printlist(&temp_b); */
+		// printf("after num a\nList a : \n ");
+		// printlist(&temp_a);
+		// printf("List b : \n ");
+		// printlist(&temp_b);
 		
-}
+} */
 
+void	fill_num_rot_a(t_node *a, t_node *b, int size_a)
+{
+	t_node	*temp_a;
+	t_node	*temp_b;
+	
+	temp_a = a;
+	temp_b = b;
+	// printf("pos before compt_a : numa =%d | numb =%d \n",
+	// 			temp_a->content,
+	// 			temp_b->content);
+	while(temp_b)
+	{
+		temp_a = a;
+		while (temp_a)
+		{
+			if (temp_b->pos_number > temp_a->prev->pos_number
+					&& temp_b->pos_number < temp_a->pos_number)
+				break;
+			if (temp_a->prev->pos_number > temp_a->pos_number
+        			&& (temp_b->pos_number > temp_a->prev->pos_number
+					|| temp_b->pos_number < temp_a->pos_number))
+        		break;
+			temp_a = temp_a->next;
+			if (temp_a == a)
+				break;
+		}
+		//printf("pour bnom = %d | aind = %d | size_a = %d\n", temp_b->content, temp_a->index, size_a);
+		if (temp_a->index < size_a / 2)
+				temp_b->compt_a = temp_a->index;
+		else if (temp_a->index == size_a / 2)
+		{
+			if (temp_b->compt_b > 0)
+				temp_b->compt_a = temp_a->index;
+			else
+				temp_b->compt_a = -temp_a->index;
+		}
+		else
+			temp_b->compt_a = temp_a->index - size_a;
+		//printf("temp_a = %d\n", temp_b->compt_a);
+		cheapest(temp_b);
+		//printf("b_tempa =%d | b_tempb= %d | b_cheap=%d\n", temp_b->compt_a, temp_b->compt_b, temp_b->cheapest);
+		temp_b = temp_b->next;
+		if (temp_b == b)
+			break;
+	}
+		// printf("after num a\nList a : \n ");
+		// printlist(&temp_a);
+		// printf("List b : \n ");
+		// printlist(&temp_b);
+		
+} 
 /* int	search_cheapest(t_node **b)
 {
 	t_node	*temp_b;
@@ -989,7 +1042,7 @@ void	move_ab_neg(t_node **a, t_node **b, int compt_a, int compt_b)
 {
 	if (compt_a != 0 && compt_b != 0)
 	{
-		while (compt_a++ < 0 || compt_b++ < 0)
+		while (compt_a++ < 0 && compt_b++ < 0)
 		{
 			rrr(a, b, 1);
 			compt_a++;
@@ -1014,7 +1067,7 @@ void	move_ab_pos(t_node **a, t_node **b, int compt_a, int compt_b)
 {
 	if (compt_a != 0 && compt_b != 0)
 	{
-		while (compt_a > 0 || compt_b > 0)
+		while (compt_a > 0 && compt_b > 0)
 		{
 			rr(a, b, 1);
 			compt_a--;
@@ -1033,9 +1086,9 @@ void	move_ab_pos(t_node **a, t_node **b, int compt_a, int compt_b)
 		}
 		else if (compt_b == 0 && compt_a != 0)
 		{
-			pa(a, b ,1);
 			while (compt_a-- > 0)
-				rra(a, 1);
+				ra(a, 1);
+			pa(a, b ,1);
 		}
 	}
 }
@@ -1067,9 +1120,6 @@ void	move_ab_sign_diff(t_node **a, t_node **b, int compt_a, int compt_b)
 
 void	move_number(t_node **a, t_node **b, int compt_a, int compt_b)
 {
-	printf("in MN s - numb = %d | numb b cheap = %d\n", (*b)->content,(*b)->cheapest);
-	printf(" pos *a = %d | pos *b = %d\n", (*a)->content, (*b)->content);
-	printf("compta = %d | compt_ b = %d\n", compt_a, compt_b);
 	if (compt_b == 0 && compt_a == 0)
 		pa(a, b, 1);
 	else if (compt_a <= 0 && compt_b <= 0)
@@ -1084,27 +1134,22 @@ void	sort_b_to_a(t_node **a, t_node **b, int size_b)
 {
 	t_node	*temp_a;
 	t_node	*temp_b;
-	//t_node	*temp;
 	int		cheapest;
 	
 	temp_a = *a;
 	temp_b = *b;
 	cheapest = search_cheapest(&temp_b);
-	printf("cheapest = %d\n", cheapest);
-	printf("numb = %d | numb b cheap = %d\n", temp_b->content,temp_b->cheapest);
 	if (temp_b->cheapest != cheapest)
 	{
 		while (temp_b->cheapest != cheapest)
 			temp_b = temp_b->next;
 	}
-	printf("AW s - numb = %d | numb b cheap = %d\n", temp_b->content,temp_b->cheapest);
-	printf("compta = %d | compt_ b = %d\n", temp_b->compt_a, temp_b->compt_b);
 	move_number(a, b, temp_b->compt_a, temp_b->compt_b);
 	//temp_b = temp;
 	size_b = lstsize(*b);
 }
 
-void	second_sort(t_node **a, t_node **b, int size)
+/* void	second_sort(t_node **a, t_node **b, int size)
 {
 	int		size_a;
 	int		size_b;
@@ -1118,39 +1163,75 @@ void	second_sort(t_node **a, t_node **b, int size)
 		actualize_index(a);
 		actualize_index(b);
 		fill_num_rot_b(*b, size_b);
-		 
-		printf("before num a\nList a : \n ");
-		printlist(a);
-		printf("List b : \n ");
-		printlist(b);
-		
 		fill_num_rot_a(*a, *b, size_a);
-
-		printf("after num a\nList b : \n ");
-		printlist(b);
-		
-		/* printf("Before sort_b_to_a ");
-		printf("b cont = %d | compt_a = %d | compt_b = %d\n", temp_b->content, temp_b->compt_a, temp_b->compt_b); */
 		sort_b_to_a(a, b, size_b);
-		/* printf("After sort_b_to_a ");
-		printf("b cont = %d | compt_a = %d | compt_b = %d\n", temp_b->content, temp_b->compt_a, temp_b->compt_b); */
 		*a = *a;
 		*b = *b;
 		if (size_b == 0)
 			break;
 	}
+		printf("uhu\n");
+} */
+void	second_sort(t_node **a, t_node **b, int size)
+{
+	int		size_a;
+	int		size_b;
+	t_node	*temp_b;
+	
+	temp_b = *b;
+	while(lstsize(*b) > 0)
+	{
+		size_a = lstsize(*a);
+		size_b = lstsize(*b);
+		actualize_index(a);
+		actualize_index(b);
+		fill_num_rot_b(*b, size_b);
+		fill_num_rot_a(*a, *b, size_a);
+		sort_b_to_a(a, b, size_b);
+	}
+}
+
+void	move_first_numb_on_top(t_node **a)
+{
+	t_node	*temp_a;
+	int		pos_number_in_a;
+
+	pos_number_in_a = 0;
+	temp_a = *a;
+	if (temp_a->pos_number != 1)
+	{
+		while (temp_a->pos_number != 1)
+		{
+			pos_number_in_a += 1;
+			temp_a = temp_a->next;
+		}
+		if (pos_number_in_a < lstsize(*a) / 2)
+		{
+			while (pos_number_in_a-- > 0)
+				ra (a, 1);
+		}
+		else if (pos_number_in_a >= lstsize(*a) / 2)
+		{
+			while (pos_number_in_a++ < 0)
+				rra (a, 1);
+		}
+	}
 }
 
 void	big_sorts(t_node **a, t_node **b, int size)
 {
+	t_node	*temp_a;
+	int	pos_first_number;
+	
 	if (size > 3)
 	{
 		lic(a);
 		is_in_lic(a);
 		pos_number(a);
 		first_sort(a, b, size);
-		printf("First sort finish\n");
+		//printf("First sort finish\n");
 		second_sort(a, b, size);
+		move_first_numb_on_top(a);
 	}
 }
 
@@ -1183,10 +1264,10 @@ int	main(int argc, char *argv[])
 		
 		t_node	*temp_a;
 		t_node	*temp_b;
-		printf("Listes après tri : \n");
+		//printf("Listes après tri : \n");
 		temp_a = a;
 		temp_b = b;
-		printalllist(temp_a, temp_b);
+		//printalllist(temp_a, temp_b);
 		
 		/* free_split(split_argv); 
 		gros doute sur le fait que ce soit free avant...*/
