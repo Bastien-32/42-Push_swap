@@ -6,11 +6,33 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:42:08 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/08 17:36:37 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/09 17:47:46 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+/* void	cheapest(t_node *b)
+{
+	if (b->compt_a <= 0 && b->compt_b <= 0)
+	{
+		if (b->compt_a < b->compt_b)
+			b->cheapest = b->compt_a;
+		else
+			b->cheapest = b->compt_b;
+	}
+	else if (b->compt_a >= 0 && b->compt_b >= 0)
+	{
+		if (b->compt_a < b->compt_b)
+			b->cheapest = b->compt_b;
+		else
+			b->cheapest = b->compt_a;
+	}
+	else if (b->compt_a <= 0 && b->compt_b >= 0)
+		b->cheapest = b->compt_b - b->compt_a;
+	else if (b->compt_a >= 0 && b->compt_b <= 0)
+		b->cheapest = b->compt_a - b->compt_b;
+} */
 
 void	cheapest(t_node *b)
 {
@@ -32,24 +54,19 @@ void	cheapest(t_node *b)
 		b->cheapest = b->compt_b - b->compt_a;
 	else if (b->compt_a >= 0 && b->compt_b <= 0)
 		b->cheapest = b->compt_a - b->compt_b;
+	if (b->cheapest < 0)
+		b->cheapest *= -1;
 }
 
-int	cheapest_cond(int cheapest)
-{
-	if (cheapest == 0)
-		return (0);
-	if (cheapest == 1)
-		return (1);
-	return (-1);
-}
 
-int	search_cheapest(t_node **b)
+/* int	search_cheapest(t_node **b)
 {
 	t_node	*temp_b;
 	int		cheapest;
 
 	temp_b = *b;
 	cheapest = temp_b->cheapest;
+	printf("cheapest to begin = %d\n", cheapest);
 	while (temp_b)
 	{
 		if (cheapest >= -1 && cheapest <= 1)
@@ -58,13 +75,36 @@ int	search_cheapest(t_node **b)
 			return (cheapest);
 		}
 		if (temp_b->cheapest < -1
-			&& ((cheapest > 1 && temp_b->cheapest < cheapest)
-				|| (cheapest < -1 && temp_b->cheapest < -cheapest)))
+			&& ((cheapest > 1 && -temp_b->cheapest < cheapest)
+				|| (cheapest < -1 && temp_b->cheapest > -cheapest)))
 			cheapest = temp_b->cheapest;
 		else if (temp_b->cheapest > 1
 			&& ((cheapest < -1 && temp_b->cheapest < -cheapest)
 				|| (cheapest > 1 && temp_b->cheapest < cheapest)))
 			cheapest = temp_b->cheapest;
+		printf("cheapest after after loop passed on nb %d = %d\n", temp_b->content, cheapest);
+		temp_b = temp_b->next;
+		if (temp_b == *b)
+			break ;
+	}
+	return (cheapest);
+} */
+
+int	search_cheapest(t_node **b)
+{
+	t_node	*temp_b;
+	int		cheapest;
+
+	temp_b = *b;
+	cheapest = temp_b->cheapest;
+	//printf("cheapest to begin = %d\n", cheapest);
+	while (1)
+	{
+		if (cheapest == 0 || cheapest == 1)
+			break ;
+		if (temp_b->cheapest < cheapest)
+			cheapest = temp_b->cheapest;
+		//printf("cheapest after after loop passed on nb %d = %d\n", temp_b->content, cheapest);
 		temp_b = temp_b->next;
 		if (temp_b == *b)
 			break ;

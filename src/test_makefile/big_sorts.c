@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:14:07 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/08 18:08:00 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/09 16:32:24 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,15 @@ void	is_in_lis(t_node **a)
 	t_node	*temp_a;
 	int		max_sub_sequence;
 	int		next_subsequence;
-	int		temp;
-
-	temp = 0;
+  
 	max_sub_sequence = find_max_sub_sequence(a);
 	temp_a = *a;
 	while (temp_a->lenght != max_sub_sequence)
 		temp_a = temp_a->next;
-	temp_a->in_lic = 1;
+	temp_a->in_lis = 1;
 	next_subsequence = temp_a->sub_sequence;
 	temp_a = temp_a->prev;
-	fill_lis(next_subsequence, temp_a, temp);
+	fill_lis(next_subsequence, &temp_a);
 }
 
 void	pos_number(t_node **a)
@@ -89,7 +87,7 @@ void	first_sort(t_node **a, t_node **b, int size)
 	head = *a;
 	while (i > 0)
 	{
-		if ((*a)->in_lic == 0)
+		if ((*a)->in_lis == 0)
 		{
 			pb(a, b, 1);
 			if ((*b)->pos_number < size / 2)

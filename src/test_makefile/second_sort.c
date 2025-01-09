@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:21:46 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/08 17:58:13 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:00:27 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,19 @@ void	sort_b_to_a(t_node **a, t_node **b)
 	int		cheapest;
 
 	temp_b = *b;
+	// printf("=========================================\n");
+	// 	printf("list a before sort b2a=\n");
+	// 	printlist(a);
+	// 	printf("list b before sort b2a=\n");
+	// 	printlist(b);
+	// 	printf("=========================================\n");
 	cheapest = search_cheapest(&temp_b);
+	//printf("cheaest= %d\n", cheapest);
 	if (temp_b->cheapest != cheapest)
 	{
 		while (temp_b->cheapest != cheapest)
 			temp_b = temp_b->next;
 	}
+	//printf("uhu\n");
 	move_number(a, b, temp_b->compt_a, temp_b->compt_b);
 }

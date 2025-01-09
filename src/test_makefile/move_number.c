@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:53:01 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/08 15:13:07 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/09 17:44:56 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	move_ab_neg(t_node **a, t_node **b, int compt_a, int compt_b)
 {
 	if (compt_a != 0 && compt_b != 0)
 	{
-		while (compt_a++ < 0 && compt_b++ < 0)
+		while (compt_a < 0 && compt_b < 0)
 		{
 			rrr(a, b, 1);
 			compt_a++;

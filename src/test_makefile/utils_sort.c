@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 13:58:17 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/08 18:06:32 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/09 12:31:55 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,14 @@ int	find_max_sub_sequence(t_node **a)
 	return (max_sub_sequence);
 }
 
-void	fill_lis(int next_subsequence, t_node *temp_a, int temp)
+/* void	fill_lis(int next_subsequence, t_node *temp_a, int temp)
 {
 	while (1)
 	{
+		printf("nb a = %d | nextsub = %d\n", temp_a->content, temp_a->sub_sequence);
 		if (temp_a->index == next_subsequence)
 		{
-			temp_a->in_lic = 1;
+			temp_a->in_lis = 1;
 			next_subsequence = temp_a->sub_sequence;
 		}
 		if (temp_a->index == next_subsequence && temp_a->sub_sequence == 0)
@@ -64,11 +65,34 @@ void	fill_lis(int next_subsequence, t_node *temp_a, int temp)
 					temp_a = temp_a->prev;
 				}
 				if (temp_a->content < temp)
-					temp_a->in_lic = 1;
+					temp_a->in_lis = 1;
 			}
 			break ;
 		}
 		temp_a = temp_a->prev;
+	}
+} */
+
+void	fill_lis(int next_subsequence, t_node **a)
+{
+	t_node	*temp_a;
+
+	temp_a = *a;
+	while (1)
+	{
+		if (temp_a->index == next_subsequence && temp_a->lenght == 1)
+		{
+			temp_a->in_lis = 1;
+			break ;
+		}
+		else if (temp_a->index == next_subsequence)
+		{
+			temp_a->in_lis = 1;
+			next_subsequence = temp_a->sub_sequence;
+			temp_a = temp_a->prev;
+		}
+		else
+			temp_a = temp_a->prev;
 	}
 }
 
@@ -91,9 +115,9 @@ void	move_first_num_on_top(t_node **a)
 			while (pos_number_in_a-- > 0)
 				ra (a, 1);
 		}
-		else if (pos_number_in_a >= lstsize_ps(*a) / 2)
+		else
 		{
-			while (pos_number_in_a++ < 0)
+			while (lstsize_ps(*a) - pos_number_in_a++ > 0)
 				rra (a, 1);
 		}
 	}

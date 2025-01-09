@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 12:37:03 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/08 17:32:08 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/09 12:50:06 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_node	*ft_lstnew_ps(int content)
 	node->content = content;
 	node->lenght = 1;
 	node->sub_sequence = 0;
-	node->in_lic = 0;
+	node->in_lis = 0;
 	node->compt_b = 0;
 	node->prev = NULL;
 	node->next = NULL;

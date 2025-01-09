@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 12:30:43 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/08 12:54:51 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/09 16:49:18 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ int	is_number(const char *str)
 int	check_stack(t_node **a, int size_a)
 {
 	if (a_is_sorted(a, size_a))
-		exit (-1);
+		exit (0);
 	if (a_contain_doubles(a))
 	{
 		write(1, "Error\n", 6);
-		return (1);
+		exit (1);
 	}
 	return (0);
 }
@@ -64,7 +64,7 @@ int	a_is_sorted(t_node **a, int size_a)
 	t_node	*temp;
 
 	temp = *a;
-	while (size_a-- >= 0)
+	while (size_a-- > 1)
 	{
 		if (temp->content > temp->next->content)
 			return (0);

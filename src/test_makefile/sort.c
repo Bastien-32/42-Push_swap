@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 13:00:09 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/08 18:04:18 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/09 16:30:11 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,12 @@ void	big_sorts(t_node **a, t_node **b, int size)
 		lis(a);
 		is_in_lis(a);
 		pos_number(a);
+		printlistlis(a);
 		first_sort(a, b, size);
+		// printf("=========================================\n");
+		// printf("list a after first sort=\n");
+		// printlistlis(a);
+		// printf("=========================================\n");
 		second_sort(a, b);
 		move_first_num_on_top(a);
 	}

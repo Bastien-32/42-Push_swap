@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 14:44:23 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/08 18:21:11 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/09 12:50:39 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct s_node
 	int				pos_number;
 	int				sub_sequence;
 	int				index;
-	int				in_lic;
+	int				in_lis;
 	int				compt_a;
 	int				compt_b;
 	int				cheapest;
@@ -34,7 +34,7 @@ typedef struct s_node
 }					t_node;
 
 /* ****************************************************************************
-									sorts
+								sorts
 **************************************************************************** */
 
 void	sort(t_node **a, t_node **b, int size);
@@ -43,7 +43,7 @@ void	sort3(t_node **a, int size);
 //void		sort10(t_node **a, int size);
 
 /* ****************************************************************************
-									check_args_and_stack
+								check_args_and_stack
 **************************************************************************** */
 
 int		check_args(int argc, char **argv);
@@ -53,7 +53,7 @@ int		a_is_sorted(t_node **a, int size_a);
 int		a_contain_doubles(t_node **a);
 
 /* ****************************************************************************
-									init_stack
+								init_stack
 **************************************************************************** */
 
 void	init_stack(int argc, char **argv, t_node **a);
@@ -63,7 +63,7 @@ void	ft_lstadd_back_ps(t_node **lst, t_node *new);
 int		ft_atoi_ps(const char *str);
 
 /* ****************************************************************************
-									commands
+								commands
 **************************************************************************** */
 
 void	rotate(t_node **stack);
@@ -86,7 +86,7 @@ void	pa(t_node **a, t_node **b, int print);
 void	pb(t_node **a, t_node **b, int print);
 
 /* ****************************************************************************
-									ft_split_ps
+								ft_split_ps
 **************************************************************************** */
 
 char	**ft_split_ps(char *str, char separator);
@@ -96,13 +96,15 @@ char	*ft_substr_ps(char *str, int start, int len);
 //static char	**free_split_ps(char **tab);
 
 /* ****************************************************************************
-									lib_utils
+								utils
 **************************************************************************** */
 
 int		lstsize_ps(t_node *lst);
+void	printlist(t_node **list);
+void	printlistlis(t_node **list);
 
 /* ****************************************************************************
-										sort
+								sort
 **************************************************************************** */
 
 void	sort(t_node **a, t_node **b, int size);
@@ -110,7 +112,7 @@ void	sort3(t_node **a, int size);
 void	big_sorts(t_node **a, t_node **b, int size);
 
 /* ****************************************************************************
-									big_sorts
+								big_sorts
 **************************************************************************** */
 
 void	lis(t_node **a);
@@ -120,16 +122,16 @@ void	first_sort(t_node **a, t_node **b, int size);
 void	second_sort(t_node **a, t_node **b);
 
 /* ****************************************************************************
-									utils_sort
+								utils_sort
 **************************************************************************** */
 
 void	update_lenghts(t_node *temp_i, t_node *temp_j, int i);
 int		find_max_sub_sequence(t_node **a);
-void	fill_lis(int next_subsequence, t_node *temp_a, int temp);
+void	fill_lis(int next_subsequence, t_node **temp_a);
 void	move_first_num_on_top(t_node **a);
 
 /* ****************************************************************************
-									second_sort
+								second_sort
 **************************************************************************** */
 
 void	actualize_index(t_node **b);
