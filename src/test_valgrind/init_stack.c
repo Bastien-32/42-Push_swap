@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 12:37:03 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/09 12:50:06 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/12 13:11:36 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,29 @@ void	init_stack(int argc, char **argv, t_node **a)
 {
 	int		i;
 	char	**split_argv;
+	t_node	*newnode;
 
-	if (argc == 2)
-		split_argv = parse_args(argc, argv);
-	else
-		split_argv = argv + 1;
+	split_argv = fill_split_argv(argc, argv);
 	*a = ft_lstnew_ps(ft_atoi_ps(split_argv[0]));
+	if (!*a)
+	{
+		free_args(split_argv);
+		return ;
+	}
 	(*a)->index = 0;
 	i = 1;
 	while (split_argv[i])
-		ft_lstadd_back_ps(a, ft_lstnew_ps(ft_atoi_ps(split_argv[i++])));
+	{
+		newnode = ft_lstnew_ps(ft_atoi_ps(split_argv[i++]));
+		if (!newnode)
+		{
+			free_list(*a);
+			free_args(split_argv);
+			return ;
+		}
+		ft_lstadd_back_ps(a, newnode);
+	}
+	free_args(split_argv);
 }
 
 char	**parse_args(int argc, char **argv)
@@ -63,7 +76,13 @@ void	ft_lstadd_back_ps(t_node **lst, t_node *new)
 {
 	t_node	*last;
 
-	if (!*lst && new)
+	if (!new)
+	{
+		free_list(*lst);
+		*lst = NULL;
+		return ;
+	}
+	if (!*lst)
 	{
 		*lst = new;
 		new->next = *lst;

@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 17:30:28 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/09 18:02:06 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/12 11:10:35 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,20 @@ int	main(int argc, char *argv[])
 
 	a = NULL;
 	b = NULL;
-	if (!check_args(argc, argv))
-	{
-		init_stack(argc, argv, &a);
-		size_a = lstsize_ps(a);
-		check_stack(&a, size_a);
-		sort(&a, &b, size_a);
-		printlist(&a);
-	}
+	if (argc == 1)
+		return (0);
 	else
-		write(1, "Error\n", 6);
+	{
+		if (!check_args(argc, argv))
+		{
+			init_stack(argc, argv, &a);
+			size_a = lstsize_ps(a);
+			check_stack(&a, size_a);
+			sort(&a, &b, size_a);
+			printlist(&a);
+		}
+		else
+			write(1, "Error\n", 6);
+	}
+	return (0);
 }
