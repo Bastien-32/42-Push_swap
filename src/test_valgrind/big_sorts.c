@@ -41,7 +41,7 @@ void	is_in_lis(t_node **a)
 	t_node	*temp_a;
 	int		max_sub_sequence;
 	int		next_subsequence;
-  
+
 	max_sub_sequence = find_max_sub_sequence(a);
 	temp_a = *a;
 	while (temp_a->lenght != max_sub_sequence)

@@ -34,7 +34,7 @@ void	free_args(char **tab)
 	int	i;
 
 	if (!tab)
-		return;
+		return ;
 	i = 0;
 	while (tab[i])
 		free(tab[i++]);
@@ -47,19 +47,19 @@ void	free_list(t_node *list)
 	t_node	*next;
 
 	if (!list)
-		return;
+		return ;
 	current = list;
 	while (1)
 	{
 		next = current->next;
 		free(current);
 		if (next == list)
-			break;
+			break ;
 		current = next;
 	}
 }
 
-char **fill_split_argv(int argc, char **argv)
+char	**fill_split_argv(int argc, char **argv)
 {
 	if (argc == 2)
 		parse_args(argc, argv);

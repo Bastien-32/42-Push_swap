@@ -9,7 +9,7 @@ NAME = push_swap
 
 CC = gcc
 
-FLAGS = -Wall -Werror -Wextra
+FLAGS = -Wall -Werror -Wextra -g
 
 %.o: %.c
 		${CC} ${FLAGS} -c $< -o $@

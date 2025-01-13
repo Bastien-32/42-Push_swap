@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: student <student@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 14:44:23 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/12 13:17:25 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/13 10:57:52 by student          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ typedef struct s_node
 
 void	sort(t_node **a, t_node **b, int size);
 void	sort3(t_node **a, int size);
-//void	sort5(t_node **a, t_node **b, int size);
-//void		sort10(t_node **a, int size);
 
 /* ****************************************************************************
 								check_args_and_stack
@@ -89,11 +87,11 @@ void	pb(t_node **a, t_node **b, int print);
 								ft_split_ps
 **************************************************************************** */
 
-char		**ft_split_ps(char *str, char separator);
-int			nwords_ps(char *str, char reject);
-int			lenword_ps(char *str, int i, char separator);
-char		*ft_substr_ps(char *str, int start, int len);
-static char	**ft_free_tab_ps(char **tab, size_t j);
+char	**ft_split_ps(char *str, char separator);
+int		nwords_ps(char *str, char reject);
+int		lenword_ps(char *str, int i, char separator);
+char	*ft_substr_ps(char *str, int start, int len);
+char	**ft_free_tab_ps(char **tab, size_t j);
 
 /* ****************************************************************************
 								utils

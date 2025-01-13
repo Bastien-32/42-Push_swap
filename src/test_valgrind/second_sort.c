@@ -101,19 +101,11 @@ void	sort_b_to_a(t_node **a, t_node **b)
 	int		cheapest;
 
 	temp_b = *b;
-	// printf("=========================================\n");
-	// 	printf("list a before sort b2a=\n");
-	// 	printlist(a);
-	// 	printf("list b before sort b2a=\n");
-	// 	printlist(b);
-	// 	printf("=========================================\n");
 	cheapest = search_cheapest(&temp_b);
-	//printf("cheaest= %d\n", cheapest);
 	if (temp_b->cheapest != cheapest)
 	{
 		while (temp_b->cheapest != cheapest)
 			temp_b = temp_b->next;
 	}
-	//printf("uhu\n");
 	move_number(a, b, temp_b->compt_a, temp_b->compt_b);
 }

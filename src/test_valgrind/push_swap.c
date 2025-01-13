@@ -12,35 +12,6 @@
 
 #include "push_swap.h"
 
-void	printlist(t_node **list)
-{
-	t_node	*tl;
-
-	tl = *list;
-	printf("n    a    b    c    p    i\n");
-	while (tl)
-	{
-		printf("%d    %d    %d    %d    %d    %d\n", tl->content, tl->compt_a, tl->compt_b, tl->cheapest, tl->pos_number, tl->index);
-		tl = tl->next;
-		if (tl == *list)
-			break;
-	}
-}
-void	printlistlis(t_node **list)
-{
-	t_node	*tl;
-
-	tl = *list;
-	printf("n    i    l    s    i    p\n");
-	while (tl)
-	{
-		printf("%d    %d    %d    %d    %d    %d\n", tl->content, tl->index , tl->lenght, tl->sub_sequence, tl->in_lis, tl->pos_number);
-		tl = tl->next;
-		if (tl == *list)
-			break;
-	}
-}
-
 int	main(int argc, char *argv[])
 {
 	t_node	*a;
@@ -59,7 +30,6 @@ int	main(int argc, char *argv[])
 			size_a = lstsize_ps(a);
 			check_stack(&a, size_a);
 			sort(&a, &b, size_a);
-			printlist(&a);
 			free_list(a);
 			free_list(b);
 		}

@@ -40,7 +40,7 @@ int	lenword_ps(char *str, int i, char separator)
 	return (count);
 }
 
-static char	**ft_free_tab_ps(char **tab, size_t j)
+char	**ft_free_tab_ps(char **tab, size_t j)
 {
 	size_t	i;
 
@@ -89,7 +89,7 @@ char	**ft_split_ps(char *str, char separator)
 		{
 			tab[j] = ft_substr_ps(str, i, lenword_ps(str, i, separator));
 			if (!tab[j])
-				return (ft_free_tab(tab, j));
+				return (ft_free_tab_ps(tab, j));
 			j++;
 			i += lenword_ps(str, i, separator);
 		}

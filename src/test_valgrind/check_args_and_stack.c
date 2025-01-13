@@ -23,6 +23,9 @@ int	check_args(int argc, char **argv)
 	{
 		if (!is_number(argv[i]))
 			return (1);
+		if (ft_atoi_ps(argv[i]) < -2147483648
+			|| ft_atoi_ps(argv[i]) > 2147483647)
+			return (1);
 		i++;
 	}
 	return (0);

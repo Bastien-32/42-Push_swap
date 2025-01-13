@@ -43,36 +43,6 @@ int	find_max_sub_sequence(t_node **a)
 	return (max_sub_sequence);
 }
 
-/* void	fill_lis(int next_subsequence, t_node *temp_a, int temp)
-{
-	while (1)
-	{
-		printf("nb a = %d | nextsub = %d\n", temp_a->content, temp_a->sub_sequence);
-		if (temp_a->index == next_subsequence)
-		{
-			temp_a->in_lis = 1;
-			next_subsequence = temp_a->sub_sequence;
-		}
-		if (temp_a->index == next_subsequence && temp_a->sub_sequence == 0)
-		{
-			if (temp_a->index != 0)
-			{
-				temp = temp_a->content;
-				while (temp_a)
-				{
-					if (temp_a->prev == NULL)
-						break ;
-					temp_a = temp_a->prev;
-				}
-				if (temp_a->content < temp)
-					temp_a->in_lis = 1;
-			}
-			break ;
-		}
-		temp_a = temp_a->prev;
-	}
-} */
-
 void	fill_lis(int next_subsequence, t_node **a)
 {
 	t_node	*temp_a;

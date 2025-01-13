@@ -1,0 +1,9 @@
+
+
+pas d'argument donne : le programme s’arrête et n’affiche rien
+lire les instructions passees
+les executer
+
+a la suite de ca si a estvtriee et b vide afficher ok sinon ko
+
+si affichage erreur dans mon programe checker doit retourner erreur 

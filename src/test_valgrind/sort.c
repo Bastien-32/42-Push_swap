@@ -46,12 +46,7 @@ void	big_sorts(t_node **a, t_node **b, int size)
 		lis(a);
 		is_in_lis(a);
 		pos_number(a);
-		printlistlis(a);
 		first_sort(a, b, size);
-		// printf("=========================================\n");
-		// printf("list a after first sort=\n");
-		// printlistlis(a);
-		// printf("=========================================\n");
 		second_sort(a, b);
 		move_first_num_on_top(a);
 	}
