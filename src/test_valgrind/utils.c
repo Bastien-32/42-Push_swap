@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 12:48:01 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/12 13:09:33 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/14 18:56:10 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,33 +35,37 @@ void	free_args(char **tab)
 
 	if (!tab)
 		return ;
-	i = 0;
-	while (tab[i])
-		free(tab[i++]);
+	i = -1;
+	while (tab[++i])
+		free(tab[i]);
 	free(tab);
 }
 
-void	free_list(t_node *list)
+void	free_list(t_node **list)
 {
-	t_node	*current;
 	t_node	*next;
+	int		size;
+	int		i;
 
-	if (!list)
+	if (!list || ! *list)
 		return ;
-	current = list;
-	while (1)
+	next = *list;
+	i = 0;
+	size = lstsize_ps(next);
+	while (i < size)
 	{
-		next = current->next;
-		free(current);
-		if (next == list)
-			break ;
-		current = next;
+		next = (*list)->next;
+		free(*list);
+		*list = next;
+		i++;
 	}
+	*list = NULL;
 }
 
-char	**fill_split_argv(int argc, char **argv)
+int	ft_strcmp_ps(char *s1, char *s2)
 {
-	if (argc == 2)
-		parse_args(argc, argv);
-	return (argv + 1);
+	int	i = 0;
+	while (s1[i] && s2[i] && s1[i] == s2[i])
+		i++;
+	return (s1[i] - s2[i]);
 }

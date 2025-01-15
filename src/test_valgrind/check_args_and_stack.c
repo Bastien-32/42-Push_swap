@@ -6,11 +6,30 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 12:30:43 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/09 16:49:18 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/14 19:06:51 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+int	number_is_int(char *nbr)
+{
+	int	i;
+
+	i =0;
+	while (nbr[i])
+		i++;
+	 if ((nbr[0] == '-' && i > 11) || (nbr[0] != '-' && i > 10))
+        return 0;
+    if (nbr[0] == '-') {
+        if (ft_strcmp_ps("-2147483648", nbr) < 0)
+            return 0;
+    } else {
+        if (ft_strcmp_ps("2147483647", nbr) < 0)
+            return 0;
+    }
+	return (1);
+}
 
 int	check_args(int argc, char **argv)
 {
@@ -23,8 +42,10 @@ int	check_args(int argc, char **argv)
 	{
 		if (!is_number(argv[i]))
 			return (1);
-		if (ft_atoi_ps(argv[i]) < -2147483648
-			|| ft_atoi_ps(argv[i]) > 2147483647)
+		/*if (ft_atoi_ps(argv[i]) <= -2147483648
+			|| ft_atoi_ps(argv[i]) >= 2147483647)
+			return (1);*/
+		if (!number_is_int)
 			return (1);
 		i++;
 	}

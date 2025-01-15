@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:21:46 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/09 18:00:27 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/14 18:24:35 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	fill_num_moves_a(t_node *a, t_node *b, int size_a)
 			temp_b->compt_a = temp_a->index;
 		else if (temp_a->index == size_a / 2)
 		{
-			if (temp_b->compt_b > 0)
+			if (temp_b->compt_b >= 0)
 				temp_b->compt_a = temp_a->index;
 			else
 				temp_b->compt_a = -temp_a->index;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: student <student@student.42.fr>            +#+  +:+       +#+        */
+/*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 14:44:23 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/13 10:57:52 by student          ###   ########.fr       */
+/*   Updated: 2025/01/14 18:56:31 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int		a_contain_doubles(t_node **a);
 **************************************************************************** */
 
 void	init_stack(int argc, char **argv, t_node **a);
-char	**parse_args(int argc, char **argv);
+char	**fill_split_argv(int argc, char **argv);
 t_node	*ft_lstnew_ps(int content);
 void	ft_lstadd_back_ps(t_node **lst, t_node *new);
 int		ft_atoi_ps(const char *str);
@@ -99,8 +99,9 @@ char	**ft_free_tab_ps(char **tab, size_t j);
 
 int		lstsize_ps(t_node *lst);
 void	free_args(char **tab);
-void	free_list(t_node *list);
-char	**fill_split_argv(int argc, char **argv);
+void	free_list(t_node **list);
+
+int	ft_strcmp_ps(char *s1, char *s2);
 
 /* ****************************************************************************
 								sort

@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 12:37:03 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/12 13:11:36 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/14 17:24:49 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,17 @@ void	init_stack(int argc, char **argv, t_node **a)
 		newnode = ft_lstnew_ps(ft_atoi_ps(split_argv[i++]));
 		if (!newnode)
 		{
-			free_list(*a);
+			free_list(a);
 			free_args(split_argv);
 			return ;
 		}
 		ft_lstadd_back_ps(a, newnode);
 	}
-	free_args(split_argv);
+	if (argc == 2)
+		free_args(split_argv);
 }
 
-char	**parse_args(int argc, char **argv)
+char	**fill_split_argv(int argc, char **argv)
 {
 	char	**split_argv;
 
@@ -78,7 +79,7 @@ void	ft_lstadd_back_ps(t_node **lst, t_node *new)
 
 	if (!new)
 	{
-		free_list(*lst);
+		free_list(lst);
 		*lst = NULL;
 		return ;
 	}
