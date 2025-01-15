@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 13:00:09 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/15 17:48:03 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/15 17:51:19 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,22 @@ void	big_sorts(t_node **a, t_node **b, int size)
 	}
 }
 
+search_min(a)
+{
+	int val_min;
+
+	val_min = INT_MAX;
+	while (a)
+	if val_min > a->content
+		val_min = a->content
+	
+}
+
 void	sort5(t_node **a, t_node **b, int size)
 {
 	if (size == 5)
 	{
-		val min = 
+		val min = search_min(a);
 		val max = 
 	while a 
 	si cont = min ou cont = max =>pb
