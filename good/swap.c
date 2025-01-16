@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 15:19:55 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/15 13:52:04 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:23:15 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,11 @@ void	swap(t_node **stack)
 		last = last->next;
 	swap = (*stack)->next;
 	(*stack)->next = swap->next;
+	if (swap->next)
+		swap->next->prev = *stack;
 	swap->next = *stack;
+	swap->prev = last;
+	(*stack)->prev = swap;
 	*stack = swap;
 	last->next = *stack;
 }

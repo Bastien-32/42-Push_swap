@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 14:44:23 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/15 15:41:03 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/16 14:16:31 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,6 @@ typedef struct s_node
 	struct s_node	*prev;
 	struct s_node	*next;
 }					t_node;
-
-/* ****************************************************************************
-								sorts
-**************************************************************************** */
-
-void	sort(t_node **a, t_node **b, int size);
-void	sort3(t_node **a, int size);
 
 /* ****************************************************************************
 								check_args_and_stack
@@ -111,6 +104,15 @@ int		number_is_int(char *nbr);
 void	sort(t_node **a, t_node **b, int size);
 void	sort3(t_node **a, int size);
 void	big_sorts(t_node **a, t_node **b, int size);
+
+/* ****************************************************************************
+								sort4 & sort5
+**************************************************************************** */
+
+void	sort4(t_node **a, t_node **b, int size, int i);
+void	sort5(t_node **a, t_node **b, int size, int i);
+int		search_min(t_node *a, int size);
+int		search_max(t_node *a, int size);
 
 /* ****************************************************************************
 								big_sorts

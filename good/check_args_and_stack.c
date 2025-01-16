@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 12:30:43 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/15 16:53:42 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:56:09 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,14 @@ int	check_stack(t_node **a, int size_a)
 	if (a_contain_doubles(a))
 	{
 		write(1, "Error\n", 6);
+		free_list(a);
 		exit (1);
 	}
 	if (a_is_sorted(a, size_a))
+	{
+		free_list(a);
 		exit (0);
+	}
 	return (0);
 }
 
@@ -98,5 +102,3 @@ int	a_contain_doubles(t_node **a)
 	}
 	return (0);
 }
-
-
