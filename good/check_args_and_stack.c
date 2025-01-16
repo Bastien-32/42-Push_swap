@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 12:30:43 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/16 13:56:09 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:40:26 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ int	check_args(int argc, char **argv)
 	{
 		if (!is_number(argv[i]))
 			return (1);
-		if (number_is_int(argv[i]))
-			return (1);
+		/*if (number_is_int(argv[i]))
+			return (1);*/
 		i++;
 	}
 	return (0);
@@ -49,7 +49,7 @@ int	is_number(const char *str)
 	return (1);
 }
 
-int	check_stack(t_node **a, int size_a)
+/*int	check_stack(t_node **a, int size_a)
 {
 	if (a_contain_doubles(a))
 	{
@@ -61,6 +61,35 @@ int	check_stack(t_node **a, int size_a)
 	{
 		free_list(a);
 		exit (0);
+	}
+	return (0);
+}*/
+
+int	check_stack(t_node **a, int size_a)
+{
+	int	i;
+
+	i = 0;
+	if (a_contain_doubles(a))
+	{
+		write(1, "Error\n", 6);
+		free_list(a);
+		exit (1);
+	}
+	if (a_is_sorted(a, size_a))
+	{
+		free_list(a);
+		exit (0);
+	}
+	while (i++ < size_a)
+	{
+		if (number_is_int((*a)->content))
+		{
+			write(1, "Error\n", 6);
+			free_list(a);
+			exit (1);
+		}
+		(*a) = (*a)->next;
 	}
 	return (0);
 }

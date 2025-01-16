@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 15:39:01 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/12 13:16:36 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:38:12 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ char	**ft_split_ps(char *str, char separator)
 			tab[j] = ft_substr_ps(str, i, lenword_ps(str, i, separator));
 			if (!tab[j])
 				return (ft_free_tab_ps(tab, j));
+			//number_is_int(tab, tab[j]);
 			j++;
 			i += lenword_ps(str, i, separator);
 		}

@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 12:48:01 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/15 15:45:49 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:39:04 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,36 @@ int	ft_strcmp_ps(char *s1, char *s2)
 		i++;
 	return (s1[i] - s2[i]);
 }
+
+/*void	number_is_int(char **tab, char *nbr)
+{
+	int	i;
+	int compt;
+
+	compt = 0;
+	i = 0;
+	while (nbr[i])
+		i++;
+	if ((nbr[0] == '-' && i > 11) || (nbr[0] != '-' && i > 10))
+		compt = 1;
+	if (nbr[0] == '-')
+	{
+		if (i == 11 && ft_strcmp_ps("-2147483648", nbr) < 0)
+			compt = 1;
+	}
+	else
+	{
+		if (i == 10 && ft_strcmp_ps("2147483647", nbr) < 0)
+			compt = 1;
+	}
+	if (compt == 1)
+	{
+		write(1, "Error\n", 6);
+		free_args(tab);
+		exit (1);
+	}
+}*/
+
 
 int	number_is_int(char *nbr)
 {
