@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 12:37:03 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/22 16:42:23 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/23 19:48:50 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	ft_atoi_ps(t_node **a, char *str)
 	int		i;
 	int		sign;
 	long	result;
-	
+
 	number_is_int(a, str);
 	i = 0;
 	result = 0;

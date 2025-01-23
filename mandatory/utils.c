@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 12:48:01 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/22 16:43:54 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/23 19:49:13 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	free_list(t_node **list)
 	t_node	*next;
 	int		size;
 	int		i;
+
 	if (!list || !*list)
 		return ;
 	next = *list;
@@ -76,7 +77,7 @@ int	ft_strcmp_ps(char *s1, char *s2)
 void	number_is_int(t_node **a, char *nbr)
 {
 	int	i;
-	int compt;
+	int	compt;
 
 	compt = 0;
 	i = 0;
