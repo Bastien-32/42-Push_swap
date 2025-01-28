@@ -6,7 +6,7 @@
 #    By: badal-la <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/23 19:45:10 by badal-la          #+#    #+#              #
-#    Updated: 2025/01/28 14:04:33 by badal-la         ###   ########.fr        #
+#    Updated: 2025/01/28 14:14:10 by badal-la         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,22 +16,22 @@
 
 DIR = mandatory
 
-SRC = $(DIR)/big_sorts.c \
-	$(DIR)/check_args_and_stack.c \
-	$(DIR)/ft_split_ps.c \
-	$(DIR)/init_stack.c \
-	$(DIR)/move_number.c \
-	$(DIR)/push_swap.c \
-	$(DIR)/push.c \
-	$(DIR)/reverse_rotate.c \
-	$(DIR)/rotate.c \
-	$(DIR)/second_sort.c \
-	$(DIR)/sort_b_to_a.c \
-	$(DIR)/sort.c \
-	$(DIR)/sort4_and_sort5.c \
-	$(DIR)/swap.c \
-	$(DIR)/utils_sort.c \
-	$(DIR)/utils.c
+SRC =	$(DIR)/big_sorts.c \
+		$(DIR)/check_args_and_stack.c \
+		$(DIR)/ft_split_ps.c \
+		$(DIR)/init_stack.c \
+		$(DIR)/move_number.c \
+		$(DIR)/push_swap.c \
+		$(DIR)/push.c \
+		$(DIR)/reverse_rotate.c \
+		$(DIR)/rotate.c \
+		$(DIR)/second_sort.c \
+		$(DIR)/sort_b_to_a.c \
+		$(DIR)/sort.c \
+		$(DIR)/sort4_and_sort5.c \
+		$(DIR)/swap.c \
+		$(DIR)/utils_sort.c \
+		$(DIR)/utils.c
 
 OBJS = $(SRC:.c=.o)
 
