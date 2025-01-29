@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 17:30:28 by badal-la          #+#    #+#             */
-/*   Updated: 2025/01/23 19:51:05 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/01/29 16:14:31 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ void	read_command(t_node **a, t_node **b, int size_a)
 		{
 			free(cmd);
 			write (2, "Error\n", 6);
+			free_list(a);
+			free_list(b);
 			exit (1);
 		}
 		free(cmd);
@@ -93,6 +95,16 @@ void	read_command(t_node **a, t_node **b, int size_a)
 		write(1, "KO\n", 3);
 }
 
+int	check_stack_bonus(t_node **a)
+{
+	if (a_contain_doubles(a))
+	{
+		write(2, "Error\n", 6);
+		free_list(a);
+		exit (1);
+	}
+	return (0);
+}
 int	main(int argc, char **argv)
 {
 	t_node	*a;
@@ -111,7 +123,7 @@ int	main(int argc, char **argv)
 		{
 			init_stack(argc, argv, &a, i);
 			size_a = lstsize_ps(a);
-			check_stack(&a, size_a);
+			check_stack_bonus(&a);
 			read_command(&a, &b, size_a);
 			free_list(&a);
 			free_list(&b);
